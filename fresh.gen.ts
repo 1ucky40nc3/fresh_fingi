@@ -7,6 +7,7 @@ import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $BleConnect from "./islands/BleConnect.tsx";
 import * as $Counter from "./islands/Counter.tsx";
+import * as $StageNavigator from "./islands/StageNavigator.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -18,6 +19,7 @@ const manifest = {
   islands: {
     "./islands/BleConnect.tsx": $BleConnect,
     "./islands/Counter.tsx": $Counter,
+    "./islands/StageNavigator.tsx": $StageNavigator,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
