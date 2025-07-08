@@ -12,7 +12,7 @@ import StageNavigatorIsland from "../islands/StageNavigator.tsx"; // Corrected i
 export default function Home(_props: PageProps) {
   // State to manage the current active stage (1, 2, or 3)
   // const [currentStage, setCurrentStage] = useState<number>(1);
-  const currentStage = signal<number>(1);
+  const currentStage = signal<number>(3);
 
   // State to track the highest stage successfully completed.
   // This is crucial for enabling/disabling navigation.
@@ -48,7 +48,7 @@ export default function Home(_props: PageProps) {
   };
 
   // Function to handle stage changes from the navigator
-  const handleStageChange = (stage: number) => {
+  const handleStageChange = (stage: number): void => {
     // Only allow changing to a stage if it's the current stage,
     // or if it's a completed stage, or if it's the next logical stage.
     if (stage <= completedStages.value + 1) {
