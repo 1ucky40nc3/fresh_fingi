@@ -5,9 +5,10 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $BleConnect from "./islands/BleConnect.tsx";
+import * as $BleConnectIsland from "./islands/BleConnectIsland.tsx";
 import * as $Counter from "./islands/Counter.tsx";
-import * as $StageNavigator from "./islands/StageNavigator.tsx";
+import * as $StageIsland from "./islands/StageIsland.tsx";
+import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -17,9 +18,10 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/BleConnect.tsx": $BleConnect,
+    "./islands/BleConnectIsland.tsx": $BleConnectIsland,
     "./islands/Counter.tsx": $Counter,
-    "./islands/StageNavigator.tsx": $StageNavigator,
+    "./islands/StageIsland.tsx": $StageIsland,
+    "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

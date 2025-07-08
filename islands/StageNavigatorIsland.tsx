@@ -1,11 +1,11 @@
 // islands/StageNavigatorIsland.tsx
 import { FunctionComponent } from "preact";
+import { Signal } from "@preact/signals";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageNavigatorIslandProps {
-  currentStage: number; // The currently active stage (1, 2, or 3)
-  completedStages: number; // The highest stage successfully completed (e.g., 0, 1, 2)
-  onStageChange: (stage: number) => void; // Callback to change the active stage
+  currentStage: Signal<number>; // The currently active stage (1, 2, or 3)
+  completedStages: Signal<number>; // The highest stage successfully completed (e.g., 0, 1, 2)
 }
 
 /**
@@ -13,8 +13,27 @@ interface StageNavigatorIslandProps {
  * for the different stages of the application (BLE Connect, Calibration, Data Read).
  */
 const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
-  { currentStage, completedStages, onStageChange },
+  props: StageNavigatorIslandProps,
 ) => {
+  let { currentStage, completedStages } = props;
+
+  // Function to handle stage changes from the navigator
+  const onStageChange = (stage: number): void => {
+    // Only allow changing to a stage if it's the current stage,
+    // or if it's a completed stage, or if it's the next logical stage.
+    if (stage <= completedStages.value + 1) {
+      currentStage.value = stage;
+      completedStages.value = stage - 1;
+      console.log(
+        `Navigating to Stage ${stage}; Completed States ${completedStages}`,
+      );
+    } else {
+      console.log(
+        `Cannot navigate to Stage ${stage}. Complete previous stages first.`,
+      );
+    }
+  };
+
   // Define the stages with their respective icons and titles.
   const stages = [
     {
@@ -75,9 +94,9 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
   const getLineClass = (lineLeadsToStage: number) => {
     const baseClass =
       "absolute top-1/2 h-1 -translate-y-1/2 z-0 transition-all duration-300 ease-in-out";
-    if (currentStage >= lineLeadsToStage) {
+    if (currentStage.value >= lineLeadsToStage) {
       return `${baseClass} bg-green-500`;
-    } else if (currentStage === lineLeadsToStage) {
+    } else if (currentStage.value === lineLeadsToStage) {
       return `${baseClass} bg-blue-400`;
     } else {
       return `${baseClass} bg-gray-600`;
@@ -91,8 +110,8 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
         <div
           class={getLineClass(2)}
           style={{
-            left: `${iconWidth / 2}px`,
-            width: `calc(50% - ${iconWidth}px)`,
+            left: `${iconWidth}px`,
+            width: `calc(50% - ${iconWidth * 3 / 2}px)`,
           }}
         >
         </div>
@@ -102,14 +121,14 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
           class={getLineClass(3)}
           style={{
             left: `calc(50% + ${iconWidth / 2}px)`,
-            width: `calc(50% - ${iconWidth}px)`,
+            width: `calc(50% - ${iconWidth * 3 / 2}px)`,
           }}
         >
         </div>
 
         {stages.map((stage) => {
-          const isActive = currentStage === stage.id;
-          const isCompleted = completedStages >= stage.id;
+          const isActive = currentStage.value === stage.id;
+          const isCompleted = completedStages.value >= stage.id;
           const isDisabled = !isCompleted && !isActive;
 
           return (
@@ -118,27 +137,25 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
               class="relative z-20 flex flex-col items-center"
             >
               <button
-                onClick={() => !isDisabled && onStageChange(stage.id)}
+                onClick={() =>
+                  !isDisabled && !isActive && onStageChange(stage.id)}
                 disabled={isDisabled}
                 class={`
                   w-14 h-14 rounded-full flex items-center justify-center
-                  transition-all duration-300 ease-in-out
                   ${
-                  isActive ? "bg-blue-500 text-white ring-4 ring-blue-300" : ""
+                  isActive
+                    ? "cursor-not-allowed bg-blue-500 text-white ring-4 ring-blue-300"
+                    : ""
                 }
                   ${
                   isCompleted && !isActive
-                    ? "bg-green-500 text-white hover:bg-green-600"
+                    ? "transition-all duration-300 ease-in-out cursor-pointer hover:scale-110 bg-green-500 text-white hover:bg-green-600"
                     : ""
                 }
                   ${
                   !isCompleted && !isActive ? "bg-gray-600 text-gray-300" : ""
                 }
-                  ${
-                  isDisabled
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer hover:scale-110"
-                }
+                  ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}
                   shadow-md
                 `}
                 aria-label={`Go to ${stage.name} stage`}
