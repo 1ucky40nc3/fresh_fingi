@@ -6,8 +6,8 @@ import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $BleConnectionIsland from "./islands/BleConnectionIsland.tsx";
-import * as $Counter from "./islands/Counter.tsx";
 import * as $SensorCalibrationIsland from "./islands/SensorCalibrationIsland.tsx";
+import * as $SensorDataDisplayIsland from "./islands/SensorDataDisplayIsland.tsx";
 import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
 import * as $StagesIsland from "./islands/StagesIsland.tsx";
 import type { Manifest } from "$fresh/server.ts";
@@ -20,8 +20,8 @@ const manifest = {
   },
   islands: {
     "./islands/BleConnectionIsland.tsx": $BleConnectionIsland,
-    "./islands/Counter.tsx": $Counter,
     "./islands/SensorCalibrationIsland.tsx": $SensorCalibrationIsland,
+    "./islands/SensorDataDisplayIsland.tsx": $SensorDataDisplayIsland,
     "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
     "./islands/StagesIsland.tsx": $StagesIsland,
   },

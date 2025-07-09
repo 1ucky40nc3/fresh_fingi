@@ -3,6 +3,7 @@ import { FunctionComponent } from "preact";
 import { Signal } from "@preact/signals";
 import BleConnectionIsland from "./BleConnectionIsland.tsx";
 import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
+import SensorDataDisplayIsland from "./SensorDataDisplayIsland.tsx";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -75,27 +76,7 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
             onCalibrationSuccess={handleCalibrationSuccess}
           />
         )}
-        {currentStage.value === 3 && (
-          <div class="text-white text-3xl flex flex-col items-center">
-            Sensor Data Reading Stage (Coming Soon!)
-            {/* You would replace this with your SensorDataDisplayIsland */}
-            {/* For demonstration, buttons to go back */}
-            <div class="flex flex-col gap-4 mt-4">
-              <button
-                onClick={handleResetToStage1}
-                class="bg-white text-blue-600 px-6 py-3 rounded-md shadow-md hover:bg-blue-100"
-              >
-                Go to Stage 1
-              </button>
-              <button
-                onClick={handleBackToStage2}
-                class="bg-white text-blue-600 px-6 py-3 rounded-md shadow-md hover:bg-blue-100"
-              >
-                Go to Stage 2
-              </button>
-            </div>
-          </div>
-        )}
+        {currentStage.value === 3 && <SensorDataDisplayIsland />}
       </div>
     </>
   );
