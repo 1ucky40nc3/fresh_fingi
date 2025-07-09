@@ -1,20 +1,20 @@
-// islands/BleConnectIsland.tsx
+// islands/BleConneciontIsland.tsx
 import { useState } from "preact/hooks";
 import { FunctionComponent } from "preact";
 
-// Define the props for the BleConnectIsland component.
+// Define the props for the BleConneciontIsland component.
 // In a real application, you might pass state management functions
 // or callbacks to transition between stages.
-interface BleConnectIslandProps {
+interface BleConnectionIslandProps {
   // Placeholder for any props needed, e.g., a callback to indicate connection success
   onConnectionSuccess?: () => void;
 }
 
 /**
- * BleConnectIsland component handles the Bluetooth Low Energy (BLE) connection stage.
+ * BleConneciontIsland component handles the Bluetooth Low Energy (BLE) connection stage.
  * It displays a large button with a Bluetooth icon to initiate the scan and connection process.
  */
-const BleConnectIsland: FunctionComponent<BleConnectIslandProps> = (
+const BleConnectionIsland: FunctionComponent<BleConnectionIslandProps> = (
   { onConnectionSuccess },
 ) => {
   // State to manage the button's loading/connection status
@@ -25,40 +25,14 @@ const BleConnectIsland: FunctionComponent<BleConnectIslandProps> = (
    * This function would contain the actual Web Bluetooth API logic in a real application.
    */
   const handleConnectClick = async () => {
-    setConnectionStatus("Scanning for devices...");
-
-    // --- Placeholder for actual Web Bluetooth API logic ---
-    // In a real application, you would use navigator.bluetooth.requestDevice() here.
-    // Example:
-    // try {
-    //   const device = await navigator.bluetooth.requestDevice({
-    //     acceptAllDevices: true, // Or specify filters for your device
-    //     optionalServices: ['your-service-uuid'] // Specify services if known
-    //   });
-    //   setConnectionStatus(`Connecting to ${device.name || 'unknown device'}...`);
-    //   const server = await device.gatt?.connect();
-    //   if (server) {
-    //     setConnectionStatus("Connected successfully!");
-    //     console.log("Connected to BLE device:", device.name);
-    //     // Call the success callback to inform the parent component/state manager
-    //     onConnectionSuccess?.();
-    //   } else {
-    //     setConnectionStatus("Failed to connect to GATT server.");
-    //   }
-    // } catch (error) {
-    //   console.error("BLE Connection Error:", error);
-    //   setConnectionStatus(`Connection failed: ${error.message}`);
-    // } finally {
-    //   setIsConnecting(false);
-    // }
-    // --- End of Placeholder ---
+    setConnectionStatus("Scanning for BLE devices...");
 
     // Simulate a connection delay for demonstration purposes
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // After simulated connection, update status
-    setConnectionStatus("Connected successfully!");
-    console.log("Simulated BLE device connected.");
+    setConnectionStatus("Successfully connected to BLE device!");
+    console.log("Successfully connected to BLE device!");
     onConnectionSuccess?.(); // Trigger the success callback
   };
 
@@ -111,4 +85,4 @@ const BleConnectIsland: FunctionComponent<BleConnectIslandProps> = (
   );
 };
 
-export default BleConnectIsland;
+export default BleConnectionIsland;

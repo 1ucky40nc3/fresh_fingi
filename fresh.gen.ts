@@ -5,10 +5,11 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $BleConnectIsland from "./islands/BleConnectIsland.tsx";
+import * as $BleConnectionIsland from "./islands/BleConnectionIsland.tsx";
 import * as $Counter from "./islands/Counter.tsx";
-import * as $StageIsland from "./islands/StageIsland.tsx";
+import * as $SensorCalibrationIsland from "./islands/SensorCalibrationIsland.tsx";
 import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
+import * as $StagesIsland from "./islands/StagesIsland.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -18,10 +19,11 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/BleConnectIsland.tsx": $BleConnectIsland,
+    "./islands/BleConnectionIsland.tsx": $BleConnectionIsland,
     "./islands/Counter.tsx": $Counter,
-    "./islands/StageIsland.tsx": $StageIsland,
+    "./islands/SensorCalibrationIsland.tsx": $SensorCalibrationIsland,
     "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
+    "./islands/StagesIsland.tsx": $StagesIsland,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

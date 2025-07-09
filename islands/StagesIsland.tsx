@@ -1,7 +1,8 @@
 // islands/StageNavigatorIsland.tsx
 import { FunctionComponent } from "preact";
 import { Signal } from "@preact/signals";
-import BleConnectIsland from "./BleConnectIsland.tsx";
+import BleConnectionIsland from "./BleConnectionIsland.tsx";
+import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -50,7 +51,7 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
     <>
       <div class="flex-grow flex items-center justify-center">
         {currentStage.value === 1 && (
-          <BleConnectIsland onConnectionSuccess={handleConnectionSuccess} />
+          <BleConnectionIsland onConnectionSuccess={handleConnectionSuccess} />
         )}
         {
           /*
@@ -59,17 +60,20 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
           */
         }
         {currentStage.value === 2 && (
-          <div class="text-white text-3xl flex flex-col items-center">
-            Sensor Calibration Stage (Coming Soon!)
-            {/* You would replace this with your SensorCalibrationIsland */}
-            {/* For demonstration, a button to simulate calibration success */}
-            <button
-              onClick={handleCalibrationSuccess}
-              class="mt-4 bg-white text-blue-600 px-6 py-3 rounded-md shadow-md hover:bg-blue-100"
-            >
-              Simulate Calibration Success
-            </button>
-          </div>
+          // <div class="text-white text-3xl flex flex-col items-center">
+          //   Sensor Calibration Stage (Coming Soon!)
+          //   {/* You would replace this with your SensorCalibrationIsland */}
+          //   {/* For demonstration, a button to simulate calibration success */}
+          //   <button
+          //     onClick={handleCalibrationSuccess}
+          //     class="mt-4 bg-white text-blue-600 px-6 py-3 rounded-md shadow-md hover:bg-blue-100"
+          //   >
+          //     Simulate Calibration Success
+          //   </button>
+          // </div>
+          <SensorCalibrationIsland
+            onCalibrationSuccess={handleCalibrationSuccess}
+          />
         )}
         {currentStage.value === 3 && (
           <div class="text-white text-3xl flex flex-col items-center">
