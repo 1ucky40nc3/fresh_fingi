@@ -59,7 +59,7 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
             onCalibrationSuccess={handleCalibrationSuccess}
           />
         )}
-        {/*{currentStage.value === 3 && <SensorDataDisplayIsland />}*/}
+        {currentStage.value === 3 && <SensorDataDisplayIsland />}
       </div>
     </>
   );

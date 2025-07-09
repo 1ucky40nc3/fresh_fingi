@@ -10,6 +10,7 @@ import * as $SensorCalibrationIsland from "./islands/SensorCalibrationIsland.tsx
 import * as $SensorDataDisplayIsland from "./islands/SensorDataDisplayIsland.tsx";
 import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
 import * as $StagesIsland from "./islands/StagesIsland.tsx";
+import * as $integrations_Chart from "./islands/integrations/Chart.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -24,6 +25,7 @@ const manifest = {
     "./islands/SensorDataDisplayIsland.tsx": $SensorDataDisplayIsland,
     "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
     "./islands/StagesIsland.tsx": $StagesIsland,
+    "./islands/integrations/Chart.tsx": $integrations_Chart,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
