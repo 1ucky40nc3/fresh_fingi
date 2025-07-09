@@ -54,29 +54,12 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
         {currentStage.value === 1 && (
           <BleConnectionIsland onConnectionSuccess={handleConnectionSuccess} />
         )}
-        {
-          /*
-            Add your SensorCalibrationIsland and SensorDataDisplayIsland here
-            when you create them, similar to the BleConnectIsland.
-          */
-        }
         {currentStage.value === 2 && (
-          // <div class="text-white text-3xl flex flex-col items-center">
-          //   Sensor Calibration Stage (Coming Soon!)
-          //   {/* You would replace this with your SensorCalibrationIsland */}
-          //   {/* For demonstration, a button to simulate calibration success */}
-          //   <button
-          //     onClick={handleCalibrationSuccess}
-          //     class="mt-4 bg-white text-blue-600 px-6 py-3 rounded-md shadow-md hover:bg-blue-100"
-          //   >
-          //     Simulate Calibration Success
-          //   </button>
-          // </div>
           <SensorCalibrationIsland
             onCalibrationSuccess={handleCalibrationSuccess}
           />
         )}
-        {currentStage.value === 3 && <SensorDataDisplayIsland />}
+        {/*{currentStage.value === 3 && <SensorDataDisplayIsland />}*/}
       </div>
     </>
   );
