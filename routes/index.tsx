@@ -3,7 +3,7 @@ import { Head } from "$fresh/runtime.ts";
 import { PageProps } from "$fresh/server.ts";
 import { signal } from "@preact/signals";
 import StageNavigatorIsland from "../islands/StageNavigatorIsland.tsx";
-import StageIsland from "../islands/StagesIsland.tsx";
+import StageIsland from "../islands/StageIsland.tsx";
 
 /**
  * The main page component for the Fresh application.
