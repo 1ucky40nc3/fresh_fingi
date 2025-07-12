@@ -47,8 +47,8 @@ export default function SensorDataDisplayIsland(
             second: "HH:mm:ss",
           },
         },
-        min: props.xAxisMin.value, // Initial min time
-        max: props.xAxisMax.value, // Initial max time
+        //min: props.xAxisMin.value, // Initial min time
+        //max: props.xAxisMax.value, // Initial max time
         title: {
           display: true,
           text: "X - Axis",
@@ -60,6 +60,7 @@ export default function SensorDataDisplayIsland(
           display: true,
           text: "Y - Axis",
         },
+        beginAtZero: false,
       },
     },
     plugins: {
@@ -67,6 +68,9 @@ export default function SensorDataDisplayIsland(
       datalabels: {
         // ... (your datalabels config)
       },
+    },
+    animation: {
+      delay: 0,
     },
   };
 

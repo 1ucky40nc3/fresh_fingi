@@ -141,6 +141,7 @@ export default function ChartIsland<
   const handleResetZoom = () => {
     if (chartRef.current) {
       console.debug("Reset chart zoom");
+      chartRef.current.data = data.value;
       chartRef.current.resetZoom();
     }
   };
@@ -170,13 +171,15 @@ export default function ChartIsland<
     }
   };
 
-  // Effect to update the chart when the signal changes
-  useEffect(() => {
+  // Update manually
+  const handler: { (): void } = () => {
     if (chartRef.current) {
-      chartRef.current.update(); // Update the chart
+      chartRef.current.data = data.value;
+      chartRef.current.update();
     }
-  }, [data.value]); // This effect runs whenever chartDataSignal.value changes
-
+  };
+  // Effect to update the chart when the signal changes
+  setInterval(handler, 100);
   return (
     <>
       <div>
