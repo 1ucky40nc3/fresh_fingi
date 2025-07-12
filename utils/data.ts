@@ -64,11 +64,19 @@ export function addExampleTimeSeriesData(
 
 export function startTimeSeriesDataGeneration(
   buffer: TimeSeriesDataType[],
+  xAxisRange: { min: string; max: string },
   config: { count: number; min: number; max: number; hertz: number },
 ) {
   const timeout: number = 1000 / config.hertz; // Offset between intervals in ms
   const handler: { (): void } = () => {
     addExampleTimeSeriesData(buffer, config);
+    const lastItem: TimeSeriesDataType = buffer[buffer.length - 1];
+    xAxisRange.max = lastItem.x;
+    const window = 30 * 1000; // 30s window
+    const numItemsPerWindow: number = Math.floor(window / timeout);
+    const indexMin: number = Math.max(buffer.length - numItemsPerWindow, 0);
+    const oldestItem: TimeSeriesDataType = buffer[indexMin];
+    xAxisRange.min = oldestItem.x;
   };
   setInterval(handler, timeout);
 }

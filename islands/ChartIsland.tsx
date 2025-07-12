@@ -170,6 +170,13 @@ export default function ChartIsland<
     }
   };
 
+  // Effect to update the chart when the signal changes
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.update(); // Update the chart
+    }
+  }, [data.value]); // This effect runs whenever chartDataSignal.value changes
+
   return (
     <>
       <div>
