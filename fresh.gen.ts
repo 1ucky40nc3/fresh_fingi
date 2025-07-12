@@ -8,8 +8,8 @@ import * as $index from "./routes/index.tsx";
 import * as $BleConnectionIsland from "./islands/BleConnectionIsland.tsx";
 import * as $SensorCalibrationIsland from "./islands/SensorCalibrationIsland.tsx";
 import * as $SensorDataDisplayIsland from "./islands/SensorDataDisplayIsland.tsx";
-import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
 import * as $StageIsland from "./islands/StageIsland.tsx";
+import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
 import * as $integrations_Chart from "./islands/integrations/Chart.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
@@ -23,8 +23,8 @@ const manifest = {
     "./islands/BleConnectionIsland.tsx": $BleConnectionIsland,
     "./islands/SensorCalibrationIsland.tsx": $SensorCalibrationIsland,
     "./islands/SensorDataDisplayIsland.tsx": $SensorDataDisplayIsland,
-    "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
     "./islands/StageIsland.tsx": $StageIsland,
+    "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
     "./islands/integrations/Chart.tsx": $integrations_Chart,
   },
   baseUrl: import.meta.url,
