@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Signal } from "@preact/signals";
 import { IS_BROWSER } from "$fresh/runtime.ts";
-
 import {
   Chart,
   ChartData,
@@ -11,14 +10,14 @@ import {
   ChartTypeRegistry,
   registerables,
 } from "chart.js";
-import "chartjs-adapter-luxon"; // Note: this typically auto-registers
+import "chartjs-adapter-luxon";
 import {
   getZoomByPanCurrentlyEnabled,
   getZoomByPinchCurrentlyEnabled,
   getZoomByWheelCurrentlyEnabled,
 } from "../utils/zoom.ts";
 
-interface ChartProps {
+interface ChartIslandProps {
   type: keyof ChartTypeRegistry;
   data: ChartData;
   options?: ChartOptions;
@@ -26,10 +25,10 @@ interface ChartProps {
 }
 
 export default function ChartIsland(
-  { type, data, options, zoomPluginOptions }: ChartProps,
+  { type, data, options, zoomPluginOptions }: ChartIslandProps,
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const chartInstance = useRef<any>(null);
+  const chartRef = useRef<Chart>();
   const [chartJsLoaded, setChartJsLoaded] = useState(false);
 
   useEffect(() => {
@@ -59,11 +58,11 @@ export default function ChartIsland(
     }
 
     if (canvasRef.current && chartJsLoaded) {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
+      if (chartRef.current) {
+        chartRef.current.destroy();
       }
 
-      chartInstance.current = new Chart(canvasRef.current, {
+      chartRef.current = new Chart(canvasRef.current, {
         type,
         data,
         options,
@@ -71,9 +70,9 @@ export default function ChartIsland(
     }
 
     return () => {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-        chartInstance.current = null;
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = undefined;
       }
     };
   }, [type, data, options, chartJsLoaded]); // Depend on chartJsLoaded to re-trigger chart creation
@@ -82,7 +81,7 @@ export default function ChartIsland(
 
   // Action Handlers
   const handleToggleZoom = () => {
-    if (chartInstance.current) {
+    if (chartRef.current) {
       const currentWheelEnabled: boolean = getZoomByWheelCurrentlyEnabled(
         zoomPluginOptions,
       );
@@ -105,12 +104,12 @@ export default function ChartIsland(
         }`,
       );
       // Call update on the chart instance to apply changes
-      chartInstance.current.update();
+      chartRef.current.update();
     }
   };
 
   const handleTogglePan = () => {
-    if (chartInstance.current) {
+    if (chartRef.current) {
       const currentPanEnabled: boolean = getZoomByPanCurrentlyEnabled(
         zoomPluginOptions,
       );
@@ -123,19 +122,19 @@ export default function ChartIsland(
           getZoomByPanCurrentlyEnabled(zoomPluginOptions)
         }`,
       );
-      chartInstance.current.update();
+      chartRef.current.update();
     }
   };
 
   const handleResetZoom = () => {
-    if (chartInstance.current) {
+    if (chartRef.current) {
       console.debug("Reset chart zoom");
-      chartInstance.current.resetZoom();
+      chartRef.current.resetZoom();
     }
   };
 
   const handleZoomNextWeek = () => {
-    if (chartInstance.current) {
+    if (chartRef.current) {
       // Luxon specific date handling
       const now = new Date(); // Or use a proper Luxon DateTime object
       const nextWeekStart = new Date(
@@ -149,19 +148,13 @@ export default function ChartIsland(
         now.getDate() + 14,
       ).toISOString();
 
-      // chart.zoomScale expects values in the same format as your data's x-axis
-      chartInstance.current.zoomScale("x", {
+      chartRef.current.zoomScale("x", {
+        // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
         min: nextWeekStart,
+        // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
         max: nextWeekEnd,
       }, "default");
-      chartInstance.current.update();
-    }
-  };
-
-  const handleZoomYAxis = () => {
-    if (chartInstance.current) {
-      chartInstance.current.zoomScale("y", { min: 400, max: 600 }, "default");
-      chartInstance.current.update();
+      chartRef.current.update();
     }
   };
 
@@ -193,12 +186,6 @@ export default function ChartIsland(
             onClick={handleZoomNextWeek}
           >
             Zoom to Next Week (X)
-          </button>
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={handleZoomYAxis}
-          >
-            Zoom to 400-600 (Y)
           </button>
         </div>
         <canvas ref={canvasRef}></canvas>
