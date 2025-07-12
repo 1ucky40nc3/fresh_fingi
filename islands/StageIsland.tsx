@@ -18,7 +18,7 @@ interface StageIslandProps {
 const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
   props: StageIslandProps,
 ) => {
-  let { currentStage, completedStages } = props;
+  const { currentStage, completedStages } = props;
 
   // Callback for when the BLE connection is successful
   const handleConnectionSuccess = () => {
@@ -32,20 +32,6 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
     completedStages.value = Math.max(completedStages.value, 2); // Mark stage 2 as completed
     currentStage.value = 3; // Automatically move to Stage 3 (Read Data)
     console.log("Calibration Success. Moving to Stage 3.");
-  };
-
-  // Placeholder for resetting or going back to stage 1 from stage 3
-  const handleResetToStage1 = () => {
-    currentStage.value = 1;
-    // Optionally, reset completedStages if you want to force re-completion
-    completedStages.value = 0;
-    console.log("Resetting to Stage 1.");
-  };
-
-  // Placeholder for going back to stage 2 from stage 3
-  const handleBackToStage2 = () => {
-    currentStage.value = 2;
-    console.log("Going back to Stage 2.");
   };
 
   return (

@@ -15,7 +15,7 @@ interface StageNavigatorIslandProps {
 const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
   props: StageNavigatorIslandProps,
 ) => {
-  let { currentStage, completedStages } = props;
+  const { currentStage, completedStages } = props;
 
   // Function to handle stage changes from the navigator
   const onStageChange = (stage: number): void => {
