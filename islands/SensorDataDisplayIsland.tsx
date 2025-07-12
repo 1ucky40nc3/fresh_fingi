@@ -2,8 +2,13 @@
 
 import { IS_BROWSER } from "$fresh/runtime.ts";
 import { ChartJs } from "https://deno.land/x/fresh_charts@0.3.1/deps.ts";
+// Import the date-fns adapter. This import usually handles the registration itself
+// by attaching to the Chart object, which fresh_charts makes available via ChartJs.Chart.
+// Ensure this import happens *after* ChartJs is available.
+import "https://esm.sh/stable/chartjs-adapter-date-fns@3.0.0?target=es2022";
+
 // Import the base Chart type from chart.js
-import type { Chart as ChartJsBaseInstanceType } from "https://esm.sh/stable/chart.js@4.4.0";
+import type { Chart as ChartJsBaseInstanceType } from "https://esm.sh/stable/chart.js@4.3.0/auto?target=es2022";
 // Import the Chart component from your local integration
 import ChartIsland from "./integrations/Chart.tsx"; // Renamed to ChartComponent to avoid confusion with Chart type
 
@@ -32,36 +37,43 @@ type ZoomAmount = number | Partial<Point> & { focalPoint?: Point };
 type PanAmount = number | Partial<Point>;
 type ScaleRange = { min: number | string; max: number | string };
 // Import Chart and UpdateMode types for the module augmentation
-import type {
-  Chart as ChartType,
-  Scale,
-  UpdateMode,
-} from "https://esm.sh/stable/chart.js@4.4.0";
+import type { Scale, UpdateMode } from "https://esm.sh/stable/chart.js@4.4.0";
 
 // Helper function to generate some dummy data
-const generateData = (count: number, min: number, max: number) => {
+const generateData = (count: number, min: number, max: number): number[] => {
   const data = [];
-  let currentDate = new Date();
   for (let i = 0; i < count; i++) {
-    data.push({
-      x: currentDate.toISOString(),
-      y: Math.random() * (max - min) + min,
-    });
-    currentDate = new Date(currentDate.getTime() + 60 * 60 * 1000); // Add 1 hour
+    data.push(Math.random() * (max - min) + min);
   }
   return data;
 };
 
+const generateLabels = (count: number): number[] => {
+  const labels: number[] = [];
+  let currentDate = new Date();
+  for (let i = 0; i < count; i++) {
+    labels.push(currentDate.getTime());
+    currentDate = new Date(currentDate.getTime() + 60 * 60 * 1000); // Add 1 hour
+  }
+  return labels;
+};
+
+const numSamples: number = 500;
+const labels: number[] = generateLabels(numSamples);
+
 // Initial data for the chart
 const initialData = {
+  labels: labels,
+  // xLabels: labels.map((label) => new Date(label).toLocaleString()),
   datasets: [{
     label: "My First dataset",
+    type: "line",
     borderColor: "rgba(75, 192, 192, 0.4)",
     backgroundColor: "rgba(75, 192, 192, 0.1)",
     pointBorderColor: "rgba(75, 192, 192, 0.7)",
     pointBackgroundColor: "rgba(75, 192, 192, 0.5)",
     pointBorderWidth: 1,
-    data: generateData(500, 0, 1000),
+    data: generateData(numSamples, 0, 20),
   }],
 };
 
@@ -89,8 +101,13 @@ export default function SensorDataDisplayIsland() {
           error,
         );
       });
+
+      // console.log("importing chartjs adapters");
+      // ChartJs.Chart._adapters = Chart._adapters;
     }
   }, []); // Empty dependency array ensures this runs only once on component mount
+
+  // import "chartjs-adapter-date-fns"; // Import the adapter
 
   // useRef to get a direct reference to the Chart.js instance
   // Use ChartJsBaseInstanceType, which is augmented by the declare module block
@@ -117,20 +134,21 @@ export default function SensorDataDisplayIsland() {
     return {
       scales: {
         x: {
-          position: "bottom",
-          // type: "time",
+          type: "time",
+          // Crucially, tell Chart.js to treat the incoming value as a timestamp directly
+          parser: (value: number) => new Date(value),
+          // You can also use a callback for the tick formatter if you need more custom logic
           ticks: {
-            autoSkip: true,
-            autoSkipPadding: 50,
-            maxRotation: 0,
+            // This formatter will apply to the axis labels
+            callback: function (value: any, index: any, ticks: any) {
+              return new Date(value).toLocaleTimeString();
+            },
           },
-          // time: {
-          //   displayFormats: {
-          //     hour: "HH:mm",
-          //     minute: "HH:mm",
-          //     second: "HH:mm:ss",
-          //   },
-          // },
+          position: "bottom",
+          title: {
+            display: true,
+            text: "X-Axis",
+          },
         },
         y: {
           position: "right",

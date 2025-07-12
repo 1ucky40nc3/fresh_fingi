@@ -1,4 +1,3 @@
-import "chartjs-adapter-date-fns"; // Import the adapter
 import {
   Chart,
   ChartProps,
