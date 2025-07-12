@@ -1,9 +1,12 @@
 // islands/StageNavigatorIsland.tsx
 import { FunctionComponent } from "preact";
-import { Signal } from "@preact/signals";
+import { Signal, useSignal } from "@preact/signals";
 import BleConnectionIsland from "./BleConnectionIsland.tsx";
 import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
-import SensorDataDisplayIsland from "./SensorDataDisplayIsland.tsx";
+import SensorDataDisplayIsland, {
+  SensorDataDisplayChartData,
+} from "./SensorDataDisplayIsland.tsx";
+import { exampleTimeSeriesData } from "../utils/data.ts";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -34,6 +37,21 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
     console.log("Calibration Success. Moving to Stage 3.");
   };
 
+  const data: TimeSeriesDataType[] = exampleTimeSeriesData({
+    count: 1000,
+    min: -200,
+    max: 200,
+    hertz: 80,
+  });
+  // Example data (adjust as needed)
+  const chartData = useSignal<SensorDataDisplayChartData>({
+    datasets: [{
+      label: "My First dataset",
+      pointBorderWidth: 1,
+      data: data,
+    }],
+  });
+
   return (
     <>
       <div class="flex-grow flex items-center justify-center">
@@ -45,7 +63,9 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
             onCalibrationSuccess={handleCalibrationSuccess}
           />
         )}
-        {currentStage.value === 3 && <SensorDataDisplayIsland />}
+        {currentStage.value === 3 && (
+          <SensorDataDisplayIsland chartData={chartData} />
+        )}
       </div>
     </>
   );

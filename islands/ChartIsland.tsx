@@ -7,7 +7,8 @@ import {
   Chart,
   ChartData,
   ChartOptions,
-  ChartTypeRegistry,
+  ChartType,
+  DefaultDataPoint,
   registerables,
 } from "chart.js";
 import "chartjs-adapter-luxon";
@@ -17,18 +18,24 @@ import {
   getZoomByWheelCurrentlyEnabled,
 } from "../utils/zoom.ts";
 
-interface ChartIslandProps {
-  type: keyof ChartTypeRegistry;
-  data: Signal<ChartData>;
-  options?: ChartOptions;
+interface ChartIslandProps<
+  TType extends ChartType = ChartType,
+  TData = DefaultDataPoint<TType>,
+> {
+  type: TType;
+  data: Signal<ChartData<TType, TData>>;
+  options?: ChartOptions<TType>;
   zoomPluginOptions: Signal<ZoomPluginOptions>;
 }
 
-export default function ChartIsland(
-  { type, data, options, zoomPluginOptions }: ChartIslandProps,
+export default function ChartIsland<
+  TType extends ChartType = ChartType,
+  TData = DefaultDataPoint<TType>,
+>(
+  { type, data, options, zoomPluginOptions }: ChartIslandProps<TType, TData>,
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const chartRef = useRef<Chart>();
+  const chartRef = useRef<Chart<TType, TData>>();
   const [chartJsLoaded, setChartJsLoaded] = useState(false);
 
   useEffect(() => {
@@ -67,7 +74,7 @@ export default function ChartIsland(
         chartRef.current.destroy();
       }
 
-      chartRef.current = new Chart(canvasRef.current, {
+      chartRef.current = new Chart<TType, TData>(canvasRef.current, {
         type: type,
         data: data.value,
         options: options,

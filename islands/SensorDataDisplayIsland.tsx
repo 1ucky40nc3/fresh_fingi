@@ -1,47 +1,19 @@
-import { useSignal } from "@preact/signals";
-import { DateTime } from "luxon";
+import { Signal, useSignal } from "@preact/signals";
 import { ChartData, ChartOptions } from "chart.js";
 import ChartIsland from "./ChartIsland.tsx";
 
-// Helper for generating dummy data (replace with your actual data logic)
-const Utils = {
-  numbers: (config: { count: number; min: number; max: number }): number[] => {
-    const data: number[] = [];
-    let value: number = (config.max + config.min) / 2;
-    for (let i = 0; i < config.count; i++) {
-      value += Math.max(
-        Math.min(5 - Math.random() * 10, config.max),
-        config.min,
-      );
-      data.push(value);
-    }
-    return data;
-  },
-  // Example for hourly points - adapt as needed for Luxon
-  dates: (config: { count: number; hertz: number }): string[] => {
-    const offset: number = 1000 / config.hertz; // Offset between dates in ms
-    const dates: string[] = [];
-    let date = DateTime.now();
-    for (let i = 0; i < config.count; i++) {
-      dates.push(date.toISO());
-      date = date.plus({ milliseconds: offset });
-    }
-    return dates;
-  },
-};
+export type SensorDataDisplayChartData = ChartData<
+  "line",
+  TimeSeriesDataType[]
+>;
 
-export default function SensorDataDisplayIsland() {
-  // Example data (adjust as needed)
-  const chartData = useSignal<ChartData>({
-    labels: Utils.dates({ count: 1000, hertz: 80 }),
-    datasets: [{
-      label: "My First dataset",
-      pointBorderWidth: 1,
-      // data: Utils.hourlyPoints({ count: 500, min: 0, max: 1000 }),
-      data: Utils.numbers({ count: 1000, min: -200, max: 200 }),
-    }],
-  });
+interface SensorDataDisplayIslandProps {
+  chartData: Signal<SensorDataDisplayChartData>;
+}
 
+export default function SensorDataDisplayIsland(
+  props: SensorDataDisplayIslandProps,
+) {
   const zoomPluginOptions = useSignal<ZoomPluginOptions>({
     zoom: {
       wheel: {
@@ -101,7 +73,7 @@ export default function SensorDataDisplayIsland() {
     <>
       <ChartIsland
         type="line"
-        data={chartData}
+        data={props.chartData}
         options={chartOptions}
         zoomPluginOptions={zoomPluginOptions}
       />
