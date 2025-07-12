@@ -5,7 +5,7 @@ import { ChartJs } from "https://deno.land/x/fresh_charts@0.3.1/deps.ts";
 // Import the base Chart type from chart.js
 import type { Chart as ChartJsBaseInstanceType } from "https://esm.sh/stable/chart.js@4.4.0";
 // Import the Chart component from your local integration
-import ChartComponent from "./integrations/Chart.tsx"; // Renamed to ChartComponent to avoid confusion with Chart type
+import ChartIsland from "./integrations/Chart.tsx"; // Renamed to ChartComponent to avoid confusion with Chart type
 
 import { useEffect, useRef, useState } from "preact/hooks";
 
@@ -73,20 +73,19 @@ export default function SensorDataDisplayIsland() {
   // This ensures the plugin is registered only once on the client side
   useEffect(() => {
     if (IS_BROWSER) {
-      console.log("importing chartjs plugins and adapter");
+      console.log("importing chartjs plugins");
       Promise.all([
         import("npm:chartjs-plugin-zoom@2.0.1"),
-        import("https://esm.sh/chartjs-adapter-date-fns@3.0.0"), // Explicitly import the adapter
-      ]).then(([zoomPlugin, dateAdapter]) => {
+      ]).then(([zoomPlugin]) => {
         // @ts-expect-error ignore plugin default typing issues
         ChartJs.Chart.register(zoomPlugin.default);
-        // @ts-expect-error ignore date adapter default typing issues
-        ChartJs.Chart.register(dateAdapter.default); // Register the date adapter
-        console.log("imported zoom plugin and date adapter");
+        // console.log(dateAdapter);
+        // ChartJs.Chart.register(dateAdapter.default); // Register the date adapter
+        console.log("imported zoom plugin");
         setIsPluginLoaded(true); // Set state to true once both are loaded
       }).catch((error) => {
         console.error(
-          "Failed to import or register chartjs plugins/adapter:",
+          "Failed to import or register chartjs plugins:",
           error,
         );
       });
@@ -119,19 +118,19 @@ export default function SensorDataDisplayIsland() {
       scales: {
         x: {
           position: "bottom",
-          type: "time",
+          // type: "time",
           ticks: {
             autoSkip: true,
             autoSkipPadding: 50,
             maxRotation: 0,
           },
-          time: {
-            displayFormats: {
-              hour: "HH:mm",
-              minute: "HH:mm",
-              second: "HH:mm:ss",
-            },
-          },
+          // time: {
+          //   displayFormats: {
+          //     hour: "HH:mm",
+          //     minute: "HH:mm",
+          //     second: "HH:mm:ss",
+          //   },
+          // },
         },
         y: {
           position: "right",
@@ -231,7 +230,7 @@ export default function SensorDataDisplayIsland() {
         {/* Conditionally render the chart only after the plugin is loaded */}
         {isPluginLoaded
           ? (
-            <ChartComponent // Using ChartComponent as per your import
+            <ChartIsland // Using ChartComponent as per your import
               type="scatter"
               // @ts-expect-error ignore typing issues
               data={initialData}
