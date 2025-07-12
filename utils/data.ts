@@ -45,3 +45,30 @@ export function exampleTimeSeriesData(
   }
   return data;
 }
+
+export function randomOffset(value: number, min: number, max: number): number {
+  const offset: number = 2 * Math.random() - 1;
+  return value + offset;
+}
+
+export function addExampleTimeSeriesData(
+  buffer: TimeSeriesDataType[],
+  config: { count: number; min: number; max: number },
+): void {
+  const avg: number = (config.max + config.min) / 2;
+  const lastValue: number = buffer[buffer.length - 1]?.y || avg;
+  const newValue: number = randomOffset(lastValue, 0.5, 10);
+  const nowIso: string = DateTime.now().toISO();
+  buffer.push({ x: nowIso, y: newValue });
+}
+
+export function startTimeSeriesDataGeneration(
+  buffer: TimeSeriesDataType[],
+  config: { count: number; min: number; max: number; hertz: number },
+) {
+  const timeout: number = 1000 / config.hertz; // Offset between intervals in ms
+  const handler: { (): void } = () => {
+    addExampleTimeSeriesData(buffer, config);
+  };
+  setInterval(handler, timeout);
+}

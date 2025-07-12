@@ -31,6 +31,8 @@ export default function SensorDataDisplayIsland(
   });
 
   const chartOptions: ChartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
     scales: {
       x: {
         position: "bottom",
@@ -71,12 +73,14 @@ export default function SensorDataDisplayIsland(
 
   return (
     <>
-      <ChartIsland
-        type="line"
-        data={props.chartData}
-        options={chartOptions}
-        zoomPluginOptions={zoomPluginOptions}
-      />
+      <div>
+        <ChartIsland
+          type="line"
+          data={props.chartData}
+          options={chartOptions}
+          zoomPluginOptions={zoomPluginOptions}
+        />
+      </div>
     </>
   );
 }

@@ -6,7 +6,7 @@ import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
 import SensorDataDisplayIsland, {
   SensorDataDisplayChartData,
 } from "./SensorDataDisplayIsland.tsx";
-import { exampleTimeSeriesData } from "../utils/data.ts";
+import { startTimeSeriesDataGeneration } from "../utils/data.ts";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -37,12 +37,8 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
     console.log("Calibration Success. Moving to Stage 3.");
   };
 
-  const data: TimeSeriesDataType[] = exampleTimeSeriesData({
-    count: 1000,
-    min: -200,
-    max: 200,
-    hertz: 80,
-  });
+  const data: TimeSeriesDataType[] = [];
+
   // Example data (adjust as needed)
   const chartData = useSignal<SensorDataDisplayChartData>({
     datasets: [{
@@ -50,6 +46,13 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
       pointBorderWidth: 1,
       data: data,
     }],
+  });
+
+  startTimeSeriesDataGeneration(chartData.value.datasets[0].data, {
+    count: 1000,
+    min: -200,
+    max: 200,
+    hertz: 10,
   });
 
   return (
