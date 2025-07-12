@@ -11,10 +11,10 @@ import StageIsland from "../islands/StageIsland.tsx";
  */
 export default function Home(_props: PageProps) {
   // State to manage the current active stage (1, 2, or 3)
-  const currentStage = signal<number>(1);
+  const currentStage = signal<number>(3);
   // State to track the highest stage successfully completed.
   // This is crucial for enabling/disabling navigation.
-  const completedStages = signal<number>(0);
+  const completedStages = signal<number>(2);
 
   console.log(
     "Home Component Rendering - currentStage.value:",

@@ -1,5 +1,7 @@
 // // islands/SensorDataDisplayIsland.tsx
 
+import { IS_BROWSER } from "$fresh/runtime.ts";
+import { ChartJs } from "https://deno.land/x/fresh_charts@0.3.1/deps.ts";
 import Chart from "./integrations/Chart.tsx";
 import { default as colorLib } from "https://esm.sh/stable/@kurkle/color@0.3.1";
 
@@ -24,27 +26,74 @@ export function transparentize(value: string, opacity?: number) {
   return colorLib(value).alpha(alpha).rgbString();
 }
 
+/**
+ * Create an integer range up to a max value.
+ *
+ * @description This function creates an integer range up to a max value.
+ * The integer range is sorted in a ascending order.
+ *
+ * @param {number} length The length of the integer range.
+ * @param {number} maxValue The maximim value of the integer range (inclusive).
+ * @returns {number[]} A integer range in ascending order up the maximum value.
+ */
+export function numRangeUpToMax(
+  length: number,
+  maxValue: number = 0,
+): number[] {
+  return [...Array(length).keys()].map((i: number): number => {
+    return maxValue - i;
+  }).reverse();
+}
+
 export default function SensorDataDisplayIsland() {
+  if (IS_BROWSER) {
+    console.log("import chartjs plugins");
+    import("npm:chartjs-plugin-zoom@2.0.1").then((plugin) => {
+      // @ts-expect-error ignore plugin default typing issues
+      ChartJs.Chart.register(plugin.default);
+      console.log("imported zoom plugin", plugin);
+    });
+  }
+
+  const data: number[] = [65, 59, 80, 81, 56, 55, 40];
+  const labels: number[] = numRangeUpToMax(data.length);
+
   return (
     <>
       <h1>Chart Example</h1>
       <Chart
         type="line"
-        options={{}}
+        options={{
+          plugins: {
+            legend: {
+              display: true,
+            },
+            // @ts-expect-error ignore zoom not in options
+            zoom: {
+              pan: {
+                enabled: true,
+                mode: "x",
+              },
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true,
+                },
+                mode: "x",
+              },
+            },
+          },
+        }}
         data={{
-          labels: ["1", "2", "3"],
+          labels: labels,
           datasets: [{
-            label: "Sessions",
-            data: [123, 234, 234],
-            borderColor: ChartColors.Red,
-            backgroundColor: transparentize(ChartColors.Red, 0.5),
-            borderWidth: 1,
-          }, {
-            label: "Users",
-            data: [346, 233, 123],
-            borderColor: ChartColors.Blue,
-            backgroundColor: transparentize(ChartColors.Blue, 0.5),
-            borderWidth: 1,
+            label: "Measurements",
+            data: data,
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
           }],
         }}
       />
