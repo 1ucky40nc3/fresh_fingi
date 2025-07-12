@@ -1,53 +1,46 @@
 import { useSignal } from "@preact/signals";
+import { DateTime } from "luxon";
+import { ChartData, ChartOptions } from "chart.js";
 import ChartIsland from "./ChartIsland.tsx";
-import {
-  getZoomByPanCurrentlyEnabled,
-  getZoomByWheelCurrentlyEnabled,
-} from "../utils/zoom.ts";
 
 // Helper for generating dummy data (replace with your actual data logic)
 const Utils = {
-  numbers: (config: { count: number; min: number; max: number }) => {
-    const arr = [];
+  numbers: (config: { count: number; min: number; max: number }): number[] => {
+    const data: number[] = [];
+    let value: number = (config.max + config.min) / 2;
     for (let i = 0; i < config.count; i++) {
-      arr.push(Math.random() * (config.max - config.min) + config.min);
-    }
-    return arr;
-  },
-  // Example for hourly points - adapt as needed for Luxon
-  hourlyPoints: (config: { count: number; min: number; max: number }) => {
-    const data = [];
-    let date = new Date("2025-01-01T00:00:00Z");
-    for (let i = 0; i < config.count; i++) {
-      data.push({
-        x: date.toISOString(), // Luxon will parse this
-        y: Math.random() * (config.max - config.min) + config.min,
-      });
-      date.setHours(date.getHours() + 1); // Add an hour
+      value += Math.max(
+        Math.min(5 - Math.random() * 10, config.max),
+        config.min,
+      );
+      data.push(value);
     }
     return data;
   },
-  randomColor: (alpha: number) => {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-    return `rgba(${r},${g},${b},${alpha})`;
+  // Example for hourly points - adapt as needed for Luxon
+  dates: (config: { count: number; hertz: number }): string[] => {
+    const offset: number = 1000 / config.hertz; // Offset between dates in ms
+    const dates: string[] = [];
+    let date = DateTime.now();
+    for (let i = 0; i < config.count; i++) {
+      dates.push(date.toISO());
+      date = date.plus({ milliseconds: offset });
+    }
+    return dates;
   },
 };
 
 export default function SensorDataDisplayIsland() {
   // Example data (adjust as needed)
-  const chartData = {
+  const chartData = useSignal<ChartData>({
+    labels: Utils.dates({ count: 1000, hertz: 80 }),
     datasets: [{
       label: "My First dataset",
-      borderColor: Utils.randomColor(0.4),
-      backgroundColor: Utils.randomColor(0.1),
-      pointBorderColor: Utils.randomColor(0.7),
-      pointBackgroundColor: Utils.randomColor(0.5),
       pointBorderWidth: 1,
-      data: Utils.hourlyPoints({ count: 500, min: 0, max: 1000 }),
+      // data: Utils.hourlyPoints({ count: 500, min: 0, max: 1000 }),
+      data: Utils.numbers({ count: 1000, min: -200, max: 200 }),
     }],
-  };
+  });
 
   const zoomPluginOptions = useSignal<ZoomPluginOptions>({
     zoom: {
@@ -65,7 +58,7 @@ export default function SensorDataDisplayIsland() {
     },
   });
 
-  const chartOptions = {
+  const chartOptions: ChartOptions = {
     scales: {
       x: {
         position: "bottom",
@@ -76,63 +69,40 @@ export default function SensorDataDisplayIsland() {
           maxRotation: 0,
         },
         time: {
-          unit: "hour", // Use hour as unit
+          unit: "second", // Use hour as unit
           displayFormats: {
             hour: "HH:mm",
             minute: "HH:mm",
             second: "HH:mm:ss",
           },
         },
+        title: {
+          display: true,
+          text: "X - Axis",
+        },
       },
       y: {
         position: "right",
-        ticks: {
-          callback: (val: any, index: number, ticks: any[]) =>
-            index === 0 || index === ticks.length - 1 ? null : val,
-        },
-        grid: {
-          borderColor: Utils.randomColor(1),
-          color: "rgba( 0, 0, 0, 0.1)",
-        },
         title: {
           display: true,
-          text: (ctx: any) => ctx.scale.axis + " axis",
+          text: "Y - Axis",
         },
       },
     },
     plugins: {
-      zoom: zoomPluginOptions.value, // Pass the mutable zoomOptions state
-      title: {
-        display: true,
-        position: "bottom",
-        text: (): string => {
-          return `Zoom: ${
-            getZoomByWheelCurrentlyEnabled(zoomPluginOptions)
-              ? "enabled"
-              : "disabled"
-          }, Pan: ${
-            getZoomByPanCurrentlyEnabled(zoomPluginOptions)
-              ? "enabled"
-              : "disabled"
-          }`;
-        },
-      },
+      zoom: zoomPluginOptions.value,
       datalabels: {
         // ... (your datalabels config)
       },
-    },
-    onClick(e: any) {
-      console.log("Chart clicked:", e.type);
     },
   };
 
   return (
     <>
       <ChartIsland
-        type="line" // or 'scatter' as in the example
-        // @ts-expect-error Ignore chart data typing errors
+        type="line"
         data={chartData}
-        options={chartOptions as any} // Cast if type issues persist, or refine ChartOptions type
+        options={chartOptions}
         zoomPluginOptions={zoomPluginOptions}
       />
     </>

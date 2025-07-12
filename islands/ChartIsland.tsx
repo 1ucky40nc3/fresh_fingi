@@ -19,7 +19,7 @@ import {
 
 interface ChartIslandProps {
   type: keyof ChartTypeRegistry;
-  data: ChartData;
+  data: Signal<ChartData>;
   options?: ChartOptions;
   zoomPluginOptions: Signal<ZoomPluginOptions>;
 }
@@ -36,17 +36,22 @@ export default function ChartIsland(
     // across re-renders.
     if (IS_BROWSER && !chartJsLoaded) {
       Promise.all([
-        import("npm:chartjs-plugin-zoom@2.0.1"),
+        import("npm:chartjs-plugin-zoom"),
         import("npm:chartjs-plugin-datalabels"),
-      ]).then(([zoomPlugin, datalabelsPlugin]) => {
+        import("npm:chartjs-plugin-streaming"),
+      ]).then(([zoomPlugin, datalabelsPlugin, streamingPlugin]) => {
         // Register all necessary components (scales, elements, controllers, etc.)
         Chart.register(...registerables); // Required for Chart.js v3+
+        // Register the zoom plugin
         // @ts-expect-error Ignore typing errors between zoom plugin and chart component types
-        Chart.register(zoomPlugin.default); // Register the zoom plugin
+        Chart.register(zoomPlugin.default);
+        // Register the datalabels plugin
         // @ts-expect-error Ignore typing errors between datalabels plugin and chart component types
-        Chart.register(datalabelsPlugin); // Register the datalabels plugin
-        // DateAdapter usually registers itself, but can be explicitly registered if issues arise.
-        // Chart.register(DateAdapter);
+        Chart.register(datalabelsPlugin);
+        // Register the streaming plugin
+        // Chart.register(streamingPlugin.RealTimeScale);
+        // Chart.register(streamingPlugin.StreamingPlugin);
+
         setChartJsLoaded(true);
         console.log("Chart.js and plugins/adapters registered.");
       }).catch((error) => {
@@ -63,9 +68,9 @@ export default function ChartIsland(
       }
 
       chartRef.current = new Chart(canvasRef.current, {
-        type,
-        data,
-        options,
+        type: type,
+        data: data.value,
+        options: options,
       });
     }
 
