@@ -1,6 +1,5 @@
 import { Signal, useSignal } from "@preact/signals";
 import { ChartData, ChartOptions } from "chart.js";
-import { DateTime } from "luxon";
 import ChartIsland from "./ChartIsland.tsx";
 
 export type SensorDataDisplayChartData = ChartData<
@@ -10,8 +9,6 @@ export type SensorDataDisplayChartData = ChartData<
 
 interface SensorDataDisplayIslandProps {
   chartData: Signal<SensorDataDisplayChartData>;
-  xAxisMin: Signal<string>;
-  xAxisMax: Signal<string>;
 }
 
 export default function SensorDataDisplayIsland(
@@ -32,7 +29,6 @@ export default function SensorDataDisplayIsland(
       mode: "xy",
     },
   });
-  const MAX_VISIBLE_TIME_WINDOW_SECONDS = 10;
 
   const chartOptions: ChartOptions = {
     responsive: true,
@@ -47,8 +43,6 @@ export default function SensorDataDisplayIsland(
             second: "HH:mm:ss",
           },
         },
-        //min: props.xAxisMin.value, // Initial min time
-        //max: props.xAxisMax.value, // Initial max time
         title: {
           display: true,
           text: "X - Axis",
@@ -60,7 +54,7 @@ export default function SensorDataDisplayIsland(
           display: true,
           text: "Y - Axis",
         },
-        beginAtZero: false,
+        beginAtZero: true,
       },
     },
     plugins: {
@@ -70,7 +64,9 @@ export default function SensorDataDisplayIsland(
       },
     },
     animation: {
-      delay: 0,
+      // @ts-expect-error Ignore typing error for now
+      y: { duration: 0 },
+      duration: 10,
     },
   };
 

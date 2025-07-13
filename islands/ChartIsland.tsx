@@ -179,7 +179,7 @@ export default function ChartIsland<
     }
   };
   // Effect to update the chart when the signal changes
-  setInterval(handler, 100);
+  setInterval(handler, 1000 / 60);
   return (
     <>
       <div>

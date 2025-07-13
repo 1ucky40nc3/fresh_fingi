@@ -1,7 +1,6 @@
 // islands/StageNavigatorIsland.tsx
 import { FunctionComponent } from "preact";
 import { Signal, useSignal } from "@preact/signals";
-import { DateTime } from "luxon";
 import BleConnectionIsland from "./BleConnectionIsland.tsx";
 import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
 import SensorDataDisplayIsland, {
@@ -39,8 +38,6 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
   };
 
   const data: TimeSeriesDataType[] = [];
-  const xAxisMin: Signal<string> = useSignal<string>(DateTime.now().toISO());
-  const xAxisMax: Signal<string> = useSignal<string>(DateTime.now().toISO());
 
   // Example data (adjust as needed)
   const chartData = useSignal<SensorDataDisplayChartData>({
@@ -48,14 +45,14 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
       label: "My First dataset",
       pointBorderWidth: 1,
       data: data,
+      tension: 0.3,
     }],
   });
 
   startTimeSeriesDataGeneration(
     chartData.value.datasets[0].data,
-    { min: xAxisMin.value, max: xAxisMax.value },
     {
-      count: 1000,
+      count: 100,
       min: -200,
       max: 200,
       hertz: 10,
@@ -76,8 +73,6 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
         {currentStage.value === 3 && (
           <SensorDataDisplayIsland
             chartData={chartData}
-            xAxisMax={xAxisMax}
-            xAxisMin={xAxisMin}
           />
         )}
       </div>
