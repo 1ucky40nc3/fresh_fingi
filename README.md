@@ -27,4 +27,5 @@ Clean the current environment:
 ```bash
 rm -r node_modules/
 deno clean
+deno cache --reload .
 ```

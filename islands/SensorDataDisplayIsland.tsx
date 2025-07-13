@@ -81,6 +81,7 @@ export default function SensorDataDisplayIsland(
     },
     plugins: {
       zoom: zoomPluginOptions.value,
+      // @ts-expect-error Some typing error
       datalabels: datalabelsPluginOptions,
     },
   };
