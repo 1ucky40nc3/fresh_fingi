@@ -9,6 +9,7 @@ export type SensorDataDisplayChartData = ChartData<
 
 interface SensorDataDisplayIslandProps {
   chartData: Signal<SensorDataDisplayChartData>;
+  onRefresh: Signal<{ (): void }>;
 }
 
 export default function SensorDataDisplayIsland(
@@ -36,7 +37,7 @@ export default function SensorDataDisplayIsland(
     scales: {
       x: {
         position: "bottom",
-        type: "time",
+        type: "realtime",
         time: {
           unit: "second", // Use hour as unit
           displayFormats: {
@@ -46,6 +47,12 @@ export default function SensorDataDisplayIsland(
         title: {
           display: true,
           text: "X - Axis",
+        },
+        realtime: {
+          duration: 20000,
+          refresh: 1000,
+          delay: 2000,
+          onRefresh: props.onRefresh.value,
         },
       },
       y: {

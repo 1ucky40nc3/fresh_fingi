@@ -173,14 +173,14 @@ export default function ChartIsland<
   };
 
   // Update manually
-  const handler: { (): void } = () => {
-    if (chartRef.current) {
-      chartRef.current.data = data.value;
-      chartRef.current.update();
-    }
-  };
-  // Effect to update the chart when the signal changes
-  setInterval(handler, 1000 / 60);
+  // const handler: { (): void } = () => {
+  //   if (chartRef.current) {
+  //     chartRef.current.data = data.value;
+  //     chartRef.current.update();
+  //   }
+  // };
+  // // Effect to update the chart when the signal changes
+  // setInterval(handler, 1000 / 60);
   return (
     <>
       <div>
