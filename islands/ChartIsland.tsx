@@ -45,7 +45,7 @@ export default function ChartIsland<
       Promise.all([
         import("npm:chartjs-plugin-zoom"),
         import("npm:chartjs-plugin-datalabels"),
-        import("npm:chartjs-plugin-streaming"),
+        import("npm:@1ucky40nc3/chartjs-plugin-streaming"),
       ]).then(([zoomPlugin, datalabelsPlugin, streamingPlugin]) => {
         // Register all necessary components (scales, elements, controllers, etc.)
         Chart.register(...registerables); // Required for Chart.js v3+
