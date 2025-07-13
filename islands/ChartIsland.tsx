@@ -56,8 +56,8 @@ export default function ChartIsland<
         // @ts-expect-error Ignore typing errors between datalabels plugin and chart component types
         Chart.register(datalabelsPlugin);
         // Register the streaming plugin
-        // Chart.register(streamingPlugin.RealTimeScale);
-        // Chart.register(streamingPlugin.StreamingPlugin);
+        Chart.register(streamingPlugin.RealTimeScale);
+        Chart.register(streamingPlugin.StreamingPlugin);
 
         setChartJsLoaded(true);
         console.log("Chart.js and plugins/adapters registered.");
@@ -142,6 +142,7 @@ export default function ChartIsland<
     if (chartRef.current) {
       console.debug("Reset chart zoom");
       chartRef.current.data = data.value;
+      //// @ts-expect-error Property 'resetZoom' does not exist on type 'Chart<TType, TData, unknown>'.deno-ts(2339)
       chartRef.current.resetZoom();
     }
   };
@@ -160,7 +161,7 @@ export default function ChartIsland<
         now.getMonth(),
         now.getDate() + 14,
       ).toISOString();
-
+      //// @ts-expect-error Property 'zoomScale' does not exist on type 'Chart<TType, TData, unknown>'.deno-ts(2339)
       chartRef.current.zoomScale("x", {
         // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
         min: nextWeekStart,
