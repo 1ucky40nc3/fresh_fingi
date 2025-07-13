@@ -6,10 +6,7 @@ import SensorCalibrationIsland from "./SensorCalibrationIsland.tsx";
 import SensorDataDisplayIsland, {
   SensorDataDisplayChartData,
 } from "./SensorDataDisplayIsland.tsx";
-import {
-  addExampleTimeSeriesData,
-  startTimeSeriesDataGeneration,
-} from "../utils/data.ts";
+import { addExampleTimeSeriesData } from "../utils/data.ts";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -49,6 +46,10 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
       pointBorderWidth: 1,
       data: data,
       tension: 0.3,
+      datalabels: {
+        align: "start",
+        anchor: "start",
+      },
     }],
   });
 
