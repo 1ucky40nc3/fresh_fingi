@@ -17,7 +17,7 @@ interface ChartIslandProps<
 > {
   type: TType;
   data: Signal<ChartData<TType, TData>>;
-  options?: Signal<ChartOptions<TType>>;
+  options: Signal<ChartOptions<TType>>;
 }
 
 export default function ChartIsland<
@@ -26,6 +26,7 @@ export default function ChartIsland<
 >(
   { type, data, options }: ChartIslandProps<TType, TData>,
 ) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart<TType, TData>>();
   const [chartJsLoaded, setChartJsLoaded] = useState(false);
@@ -62,10 +63,18 @@ export default function ChartIsland<
         chartRef.current.destroy();
       }
 
+      if (containerRef.current) {
+        options.value = {
+          ...options.value,
+          aspectRatio: containerRef.current?.offsetHeight /
+            containerRef.current?.offsetWidth,
+        };
+      }
+
       chartRef.current = new Chart<TType, TData>(canvasRef.current, {
         type: type,
         data: data.value,
-        options: options?.value,
+        options: options.value,
       });
     }
 
@@ -126,26 +135,32 @@ export default function ChartIsland<
   };
   return (
     <>
-      <canvas ref={canvasRef}></canvas>
-      <div>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleStopAndResumeDataStream}
-        >
-          {doStopDataStream.value ? "Stop" : "Resume"}
-        </button>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleResetZoom}
-        >
-          Reset Zoom
-        </button>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleClearData}
-        >
-          Clear data
-        </button>
+      <div
+        ref={containerRef}
+        class="w-full h-full flex flex-col justify-center"
+      >
+        <canvas ref={canvasRef}>
+        </canvas>
+        <div class="w-full flex flex-row flex-grow justify-around">
+          <button
+            class=" text-white rounded"
+            onClick={handleStopAndResumeDataStream}
+          >
+            {doStopDataStream.value ? "Stop" : "Resume"}
+          </button>
+          <button
+            class=" text-white rounded"
+            onClick={handleResetZoom}
+          >
+            Reset Zoom
+          </button>
+          <button
+            class=" text-white rounded "
+            onClick={handleClearData}
+          >
+            Clear data
+          </button>
+        </div>
       </div>
     </>
   );

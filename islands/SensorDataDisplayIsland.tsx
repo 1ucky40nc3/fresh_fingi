@@ -38,12 +38,12 @@ export default function SensorDataDisplayIsland(
       x: {
         position: "bottom",
         type: "realtime",
-        time: {
-          unit: "second",
-          displayFormats: {
-            second: "HH:mm:ss",
-          },
-        },
+        // time: {
+        //   unit: "second",
+        //   displayFormats: {
+        //     second: "HH:mm:ss",
+        //   },
+        // },
         realtime: {
           duration: 20000, // Show the last 20 seconds
           refresh: 100, // Refresh every 100 ms
@@ -63,20 +63,22 @@ export default function SensorDataDisplayIsland(
     interaction: {
       intersect: false,
     },
+
     plugins: {
       zoom: zoomPluginOptions,
+      legend: {
+        display: false,
+      },
     },
   });
 
   return (
     <>
-      <div>
-        <ChartIsland
-          type="line"
-          data={props.chartData}
-          options={chartOptions}
-        />
-      </div>
+      <ChartIsland
+        type="line"
+        data={props.chartData}
+        options={chartOptions}
+      />
     </>
   );
 }

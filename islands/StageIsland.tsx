@@ -42,7 +42,7 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
   // Example data (adjust as needed)
   const chartData = useSignal<SensorDataDisplayChartData>({
     datasets: [{
-      label: "My First dataset",
+      label: "Sensor Time Series Data",
       pointBorderWidth: 1,
       data: data,
       tension: 0.3,

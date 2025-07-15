@@ -28,7 +28,7 @@ export default function Home(_props: PageProps) {
         {/* Viewport meta tag for responsive design */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div class="min-h-screen flex flex-col bg-blue-500">
+      <div class="min-h-screen flex flex-col bg-drk-surface-a0">
         {/* Stage Navigator at the top */}
         <StageNavigatorIsland
           currentStage={currentStage}
