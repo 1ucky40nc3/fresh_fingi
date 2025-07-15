@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { Signal } from "@preact/signals";
+import { Signal, useSignal } from "@preact/signals";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 import {
   Chart,
@@ -10,11 +10,6 @@ import {
   registerables,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import {
-  getZoomByPanCurrentlyEnabled,
-  getZoomByPinchCurrentlyEnabled,
-  getZoomByWheelCurrentlyEnabled,
-} from "../utils/zoom.ts";
 
 interface ChartIslandProps<
   TType extends ChartType = ChartType,
@@ -22,15 +17,14 @@ interface ChartIslandProps<
 > {
   type: TType;
   data: Signal<ChartData<TType, TData>>;
-  options?: ChartOptions<TType>;
-  zoomPluginOptions: Signal<ZoomPluginOptions>;
+  options?: Signal<ChartOptions<TType>>;
 }
 
 export default function ChartIsland<
   TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
 >(
-  { type, data, options, zoomPluginOptions }: ChartIslandProps<TType, TData>,
+  { type, data, options }: ChartIslandProps<TType, TData>,
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart<TType, TData>>();
@@ -71,7 +65,7 @@ export default function ChartIsland<
       chartRef.current = new Chart<TType, TData>(canvasRef.current, {
         type: type,
         data: data.value,
-        options: options,
+        options: options?.value,
       });
     }
 
@@ -83,24 +77,74 @@ export default function ChartIsland<
     };
   }, [type, data, options, chartJsLoaded]);
 
-  const handleResetZoom = () => {
+  const doStopDataStream: Signal<boolean> = useSignal<boolean>(true);
+  const onRefreshHandler: Signal<{ (): void }> = useSignal<{ (): void }>(
+    () => {},
+  );
+
+  const handleStopAndResumeDataStream: { (): void } = (): void => {
+    if (chartRef.current) {
+      console.debug("Toggle stop/resume data streaming");
+      // @ts-expect-error  Property 'realtime' does not exist on type
+      if (chartRef.current.config.options?.scales?.x?.realtime) {
+        // @ts-expect-error  Property 'realtime' does not exist on type
+        const realtime = chartRef.current.config.options.scales.x.realtime;
+
+        // Replace the `onRefresh` handle with a empty dummy function if we want to stop the data stream
+        const tmpOnRefreshHandler: { (): void } = realtime.onRefresh;
+        realtime.onRefresh = onRefreshHandler.value;
+        onRefreshHandler.value = tmpOnRefreshHandler;
+        // Do stop the scrolling
+        realtime.pause = doStopDataStream.value;
+      }
+      doStopDataStream.value = !doStopDataStream.value;
+      console.debug(
+        `Did toggle the doStopDataStream value to '${doStopDataStream}'`,
+      );
+    }
+  };
+
+  const handleResetZoom: { (): void } = (): void => {
     if (chartRef.current) {
       console.debug("Reset chart zoom");
+
       chartRef.current.data = data.value;
-      //// @ts-expect-error Property 'resetZoom' does not exist on type 'Chart<TType, TData, unknown>'.deno-ts(2339)
       chartRef.current.resetZoom();
     }
   };
 
+  const handleClearData: { (): void } = (): void => {
+    if (chartRef.current) {
+      console.debug("Clear data");
+
+      for (const dataset of data.value.datasets) {
+        dataset.data = [] as TData;
+      }
+      chartRef.current.data = data.value;
+      chartRef.current.resetZoom();
+    }
+  };
   return (
     <>
       <canvas ref={canvasRef}></canvas>
       <div>
         <button
           class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleStopAndResumeDataStream}
+        >
+          {doStopDataStream.value ? "Stop" : "Resume"}
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={handleResetZoom}
         >
           Reset Zoom
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleClearData}
+        >
+          Clear data
         </button>
       </div>
     </>

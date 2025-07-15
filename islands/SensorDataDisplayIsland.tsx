@@ -15,7 +15,7 @@ interface SensorDataDisplayIslandProps {
 export default function SensorDataDisplayIsland(
   props: SensorDataDisplayIslandProps,
 ) {
-  const zoomPluginOptions = useSignal<ZoomPluginOptions>({
+  const zoomPluginOptions: ZoomPluginOptions = {
     zoom: {
       wheel: {
         enabled: true,
@@ -29,9 +29,9 @@ export default function SensorDataDisplayIsland(
       enabled: true,
       mode: "xy",
     },
-  });
+  };
 
-  const chartOptions: ChartOptions = {
+  const chartOptions: Signal<ChartOptions> = useSignal<ChartOptions>({
     responsive: true,
     maintainAspectRatio: true,
     scales: {
@@ -39,19 +39,15 @@ export default function SensorDataDisplayIsland(
         position: "bottom",
         type: "realtime",
         time: {
-          unit: "second", // Use hour as unit
+          unit: "second",
           displayFormats: {
             second: "HH:mm:ss",
           },
         },
-        title: {
-          display: true,
-          text: "X - Axis",
-        },
         realtime: {
-          duration: 20000,
-          refresh: 1000,
-          delay: 2000,
+          duration: 20000, // Show the last 20 seconds
+          refresh: 100, // Refresh every 100 ms
+          delay: 100, // Delay in ms until the newest data point is shown
           onRefresh: props.onRefresh.value,
         },
       },
@@ -59,7 +55,7 @@ export default function SensorDataDisplayIsland(
         position: "right",
         title: {
           display: true,
-          text: "Y - Axis",
+          text: "Force (kg)",
         },
         beginAtZero: true,
       },
@@ -68,9 +64,9 @@ export default function SensorDataDisplayIsland(
       intersect: false,
     },
     plugins: {
-      zoom: zoomPluginOptions.value,
+      zoom: zoomPluginOptions,
     },
-  };
+  });
 
   return (
     <>
@@ -79,7 +75,6 @@ export default function SensorDataDisplayIsland(
           type="line"
           data={props.chartData}
           options={chartOptions}
-          zoomPluginOptions={zoomPluginOptions}
         />
       </div>
     </>
