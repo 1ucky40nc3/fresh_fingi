@@ -1,7 +1,6 @@
 import { Signal, useSignal } from "@preact/signals";
 import { ChartData, ChartOptions } from "chart.js";
 import ChartIsland from "./ChartIsland.tsx";
-import { Context } from "npm:chartjs-plugin-datalabels";
 
 export type SensorDataDisplayChartData = ChartData<
   "line",
@@ -31,17 +30,6 @@ export default function SensorDataDisplayIsland(
       mode: "xy",
     },
   });
-  const datalabelsPluginOptions = {
-    backgroundColor: (context: Context) => context.dataset.borderColor,
-    padding: 4,
-    borderRadius: 4,
-    clip: true,
-    color: "white",
-    font: {
-      weight: "bold",
-    },
-    formatter: (value: TimeSeriesDataType) => value.x,
-  };
 
   const chartOptions: ChartOptions = {
     responsive: true,
@@ -81,8 +69,6 @@ export default function SensorDataDisplayIsland(
     },
     plugins: {
       zoom: zoomPluginOptions.value,
-      // @ts-expect-error Some typing error
-      datalabels: datalabelsPluginOptions,
     },
   };
 

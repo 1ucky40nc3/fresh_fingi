@@ -1,4 +1,3 @@
-// islands/BleConneciontIsland.tsx
 import { useState } from "preact/hooks";
 import { FunctionComponent } from "preact";
 

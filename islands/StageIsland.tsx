@@ -46,10 +46,6 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
       pointBorderWidth: 1,
       data: data,
       tension: 0.3,
-      datalabels: {
-        align: "start",
-        anchor: "start",
-      },
     }],
   });
 

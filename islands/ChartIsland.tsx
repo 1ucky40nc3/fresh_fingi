@@ -1,5 +1,3 @@
-// islands/ChartComponent.tsx
-
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Signal } from "@preact/signals";
 import { IS_BROWSER } from "$fresh/runtime.ts";
@@ -44,17 +42,13 @@ export default function ChartIsland<
     if (IS_BROWSER && !chartJsLoaded) {
       Promise.all([
         import("npm:chartjs-plugin-zoom"),
-        import("npm:chartjs-plugin-datalabels"),
         import("npm:@1ucky40nc3/chartjs-plugin-streaming"),
-      ]).then(([zoomPlugin, datalabelsPlugin, streamingPlugin]) => {
+      ]).then(([zoomPlugin, streamingPlugin]) => {
         // Register all necessary components (scales, elements, controllers, etc.)
         Chart.register(...registerables); // Required for Chart.js v3+
         // Register the zoom plugin
         // @ts-expect-error Ignore typing errors between zoom plugin and chart component types
         Chart.register(zoomPlugin.default);
-        // Register the datalabels plugin
-        // @ts-expect-error Ignore typing errors between datalabels plugin and chart component types
-        Chart.register(datalabelsPlugin);
         // Register the streaming plugin
         Chart.register(streamingPlugin.RealTimeScale);
         Chart.register(streamingPlugin.StreamingPlugin);
@@ -87,9 +81,7 @@ export default function ChartIsland<
         chartRef.current = undefined;
       }
     };
-  }, [type, data, options, chartJsLoaded]); // Depend on chartJsLoaded to re-trigger chart creation
-
-  // const [zoomOptionsState, setZoomOptions] = useState(zoomOptions);
+  }, [type, data, options, chartJsLoaded]);
 
   // Action Handlers
   const handleToggleZoom = () => {
@@ -161,7 +153,6 @@ export default function ChartIsland<
         now.getMonth(),
         now.getDate() + 14,
       ).toISOString();
-      //// @ts-expect-error Property 'zoomScale' does not exist on type 'Chart<TType, TData, unknown>'.deno-ts(2339)
       chartRef.current.zoomScale("x", {
         // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
         min: nextWeekStart,
@@ -172,15 +163,6 @@ export default function ChartIsland<
     }
   };
 
-  // Update manually
-  // const handler: { (): void } = () => {
-  //   if (chartRef.current) {
-  //     chartRef.current.data = data.value;
-  //     chartRef.current.update();
-  //   }
-  // };
-  // // Effect to update the chart when the signal changes
-  // setInterval(handler, 1000 / 60);
   return (
     <>
       <div>
