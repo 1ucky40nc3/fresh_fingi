@@ -83,53 +83,6 @@ export default function ChartIsland<
     };
   }, [type, data, options, chartJsLoaded]);
 
-  // Action Handlers
-  const handleToggleZoom = () => {
-    if (chartRef.current) {
-      const currentWheelEnabled: boolean = getZoomByWheelCurrentlyEnabled(
-        zoomPluginOptions,
-      );
-      const currentPinchEnabled: boolean = getZoomByPinchCurrentlyEnabled(
-        zoomPluginOptions,
-      );
-      zoomPluginOptions.value.zoom = {
-        ...zoomPluginOptions.value,
-        wheel: { enabled: !currentWheelEnabled },
-        pinch: { enabled: !currentPinchEnabled },
-      };
-      console.debug(
-        `Changed wheel-zoom option to: ${
-          getZoomByWheelCurrentlyEnabled(zoomPluginOptions)
-        }`,
-      );
-      console.debug(
-        `Changed pinch-zoom option to: ${
-          getZoomByPinchCurrentlyEnabled(zoomPluginOptions)
-        }`,
-      );
-      // Call update on the chart instance to apply changes
-      chartRef.current.update();
-    }
-  };
-
-  const handleTogglePan = () => {
-    if (chartRef.current) {
-      const currentPanEnabled: boolean = getZoomByPanCurrentlyEnabled(
-        zoomPluginOptions,
-      );
-      zoomPluginOptions.value.pan = {
-        enabled: !currentPanEnabled,
-        mode: "xy",
-      };
-      console.debug(
-        `Changed pan-zoom option to: ${
-          getZoomByPanCurrentlyEnabled(zoomPluginOptions)
-        }`,
-      );
-      chartRef.current.update();
-    }
-  };
-
   const handleResetZoom = () => {
     if (chartRef.current) {
       console.debug("Reset chart zoom");
@@ -139,61 +92,16 @@ export default function ChartIsland<
     }
   };
 
-  const handleZoomNextWeek = () => {
-    if (chartRef.current) {
-      // Luxon specific date handling
-      const now = new Date(); // Or use a proper Luxon DateTime object
-      const nextWeekStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 7,
-      ).toISOString();
-      const nextWeekEnd = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 14,
-      ).toISOString();
-      chartRef.current.zoomScale("x", {
-        // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
-        min: nextWeekStart,
-        // @ts-expect-error Type 'string' is not assignable to type 'number'.deno-ts(2322) index.d.ts(7, 21): The expected type comes from property 'min' which is declared here on type 'ScaleRange'
-        max: nextWeekEnd,
-      }, "default");
-      chartRef.current.update();
-    }
-  };
-
   return (
     <>
+      <canvas ref={canvasRef}></canvas>
       <div>
-        {/* Action Buttons */}
-        <div class="my-4 flex gap-2">
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={handleToggleZoom}
-          >
-            Toggle Zoom
-          </button>
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={handleTogglePan}
-          >
-            Toggle Pan
-          </button>
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={handleResetZoom}
-          >
-            Reset Zoom
-          </button>
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={handleZoomNextWeek}
-          >
-            Zoom to Next Week (X)
-          </button>
-        </div>
-        <canvas ref={canvasRef}></canvas>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleResetZoom}
+        >
+          Reset Zoom
+        </button>
       </div>
     </>
   );
