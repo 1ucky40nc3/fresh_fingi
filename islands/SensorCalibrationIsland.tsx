@@ -4,6 +4,7 @@ import { FunctionComponent } from "preact";
 interface SensorCalibrationIslandProps {
   // Placeholder for any props needed, e.g., a callback to indicate connection success
   onCalibrationSuccess?: () => void;
+  // TODO: Calibration status as prop signal
 }
 
 const SensorCalibrationIsland: FunctionComponent<SensorCalibrationIslandProps> =
@@ -12,7 +13,7 @@ const SensorCalibrationIsland: FunctionComponent<SensorCalibrationIslandProps> =
   ) => {
     // State to manage the button's loading/connection status
     const [calibrationStatus, setCalibrationStatus] = useState<string | null>(
-      null,
+      "Start Sensor Calibration!",
     );
 
     /**
@@ -26,22 +27,22 @@ const SensorCalibrationIsland: FunctionComponent<SensorCalibrationIslandProps> =
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // After simulated connection, update status
-      setCalibrationStatus("Calibration completed.");
+      setCalibrationStatus("Repeat Sensor Calibration.");
       console.log("Simulated BLE device connected.");
       onCalibrationSuccess?.(); // Trigger the success callback
     };
 
     return (
       // The main container for the island, setting the blue background and full screen size
-      <div class="min-h-screen flex items-center justify-center bg-blue-500 p-4">
-        <div class="text-center">
+      <div class="min-h-screen bg-drk-surface-a0 p-4">
+        <div class="flex flex-col justify-center align-middle">
           {/* Bluetooth Connection Button */}
           <button
             type="button"
             onClick={handleCalibrationClick}
             class="
-            bg-white text-blue-600
-            hover:bg-blue-100 focus:ring-4 focus:ring-blue-300
+            bg-drk-surface-a10 text-drk-primary-a0
+            hover:bg-drk-surface-a20 focus:ring-4 focus:ring-drk-primary-a30
             font-bold py-8 px-12 rounded-full shadow-lg
             transition duration-300 ease-in-out transform hover:scale-105
             flex items-center justify-center space-x-4
@@ -58,7 +59,6 @@ const SensorCalibrationIsland: FunctionComponent<SensorCalibrationIslandProps> =
               {/* Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc. */}
               <path d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z" />
             </svg>
-            <span class="sr-only">Connect to Bluetooth Device</span>
           </button>
 
           {/* Connection Status Message */}

@@ -1,6 +1,7 @@
 // islands/StageNavigatorIsland.tsx
 import { FunctionComponent } from "preact";
 import { Signal } from "@preact/signals";
+import { DARK_MODE_COLORS } from "../colors.ts";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageNavigatorIslandProps {
@@ -95,16 +96,14 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
     const baseClass =
       "absolute top-1/2 h-1 -translate-y-1/2 z-0 transition-all duration-300 ease-in-out";
     if (currentStage.value >= lineLeadsToStage) {
-      return `${baseClass} bg-green-500`;
-    } else if (currentStage.value === lineLeadsToStage) {
-      return `${baseClass} bg-blue-400`;
+      return `${baseClass} bg-drk-primary-a10`;
     } else {
-      return `${baseClass} bg-gray-600`;
+      return `${baseClass} bg-drk-surface-a40`;
     }
   };
 
   return (
-    <div class="w-full bg-gray-800 text-white p-4 shadow-lg">
+    <div class="w-full bg-drk-surface-a0 text-white p-4 shadow-lg">
       <div class="max-w-3xl mx-auto flex justify-between items-center relative h-14">
         {/* Line 1: Between Stage 1 and Stage 2 */}
         <div
@@ -131,6 +130,23 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
           const isCompleted = completedStages.value >= stage.id;
           const isDisabled = !isCompleted && !isActive;
 
+          let cssClass: string =
+            "w-14 h-14 rounded-full flex items-center justify-center shadow-md text-white ";
+          if (isActive) {
+            cssClass +=
+              "cursor-not-allowed bg-drk-surface-a30 ring-4 ring-drk-primary-a10";
+          } else {
+            if (isCompleted) {
+              cssClass +=
+                "transition-all duration-300 ease-in-out cursor-pointer hover:scale-110 bg-drk-surface-a30 ring-drk-primary-a10 hover:bg-drk-surface-a50";
+            } else {
+              cssClass += "bg-drk-surface-a30 text-drk-surface-a50";
+            }
+          }
+          if (isDisabled) {
+            cssClass += "opacity-50 cursor-not-allowed";
+          }
+
           return (
             <div
               key={stage.id}
@@ -140,24 +156,7 @@ const StageNavigatorIsland: FunctionComponent<StageNavigatorIslandProps> = (
                 onClick={() =>
                   !isDisabled && !isActive && onStageChange(stage.id)}
                 disabled={isDisabled}
-                class={`
-                  w-14 h-14 rounded-full flex items-center justify-center
-                  ${
-                  isActive
-                    ? "cursor-not-allowed bg-blue-500 text-white ring-4 ring-blue-300"
-                    : ""
-                }
-                  ${
-                  isCompleted && !isActive
-                    ? "transition-all duration-300 ease-in-out cursor-pointer hover:scale-110 bg-green-500 text-white hover:bg-green-600"
-                    : ""
-                }
-                  ${
-                  !isCompleted && !isActive ? "bg-gray-600 text-gray-300" : ""
-                }
-                  ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}
-                  shadow-md
-                `}
+                class={cssClass}
                 aria-label={`Go to ${stage.name} stage`}
               >
                 {stage.icon}

@@ -137,25 +137,25 @@ export default function ChartIsland<
     <>
       <div
         ref={containerRef}
-        class="w-full h-full flex flex-col justify-center"
+        class="w-full h-full flex flex-col justify-around"
       >
         <canvas ref={canvasRef}>
         </canvas>
         <div class="w-full flex flex-row flex-grow justify-around">
           <button
-            class=" text-white rounded"
+            class=" text-white rounded bg-drk-surface-a20"
             onClick={handleStopAndResumeDataStream}
           >
             {doStopDataStream.value ? "Stop" : "Resume"}
           </button>
           <button
-            class=" text-white rounded"
+            class=" text-white rounded bg-drk-surface-a20"
             onClick={handleResetZoom}
           >
             Reset Zoom
           </button>
           <button
-            class=" text-white rounded "
+            class=" text-white rounded bg-drk-surface-a20"
             onClick={handleClearData}
           >
             Clear data

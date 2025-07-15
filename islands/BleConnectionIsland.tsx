@@ -7,6 +7,7 @@ import { FunctionComponent } from "preact";
 interface BleConnectionIslandProps {
   // Placeholder for any props needed, e.g., a callback to indicate connection success
   onConnectionSuccess?: () => void;
+  // TODO: prop and signal to handle bluetooth disconnect
 }
 
 /**
@@ -17,7 +18,9 @@ const BleConnectionIsland: FunctionComponent<BleConnectionIslandProps> = (
   { onConnectionSuccess },
 ) => {
   // State to manage the button's loading/connection status
-  const [connectionStatus, setConnectionStatus] = useState<string | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<string | null>(
+    "Connect to Bluetooth Device!",
+  );
 
   /**
    * Handles the click event for the Bluetooth connect button.
@@ -37,15 +40,15 @@ const BleConnectionIsland: FunctionComponent<BleConnectionIslandProps> = (
 
   return (
     // The main container for the island, setting the blue background and full screen size
-    <div class="min-h-screen flex items-center justify-center bg-blue-500 p-4">
-      <div class="text-center">
+    <div class="min-h-screen bg-drk-surface-a0 p-4">
+      <div class="flex flex-col justify-center align-middle">
         {/* Bluetooth Connection Button */}
         <button
           type="button"
           onClick={handleConnectClick}
           class="
-            bg-white text-blue-600
-            hover:bg-blue-100 focus:ring-4 focus:ring-blue-300
+            bg-drk-surface-a10 text-drk-primary-a0
+            hover:bg-drk-surface-a20 focus:ring-4 focus:ring-drk-primary-a30
             font-bold py-8 px-12 rounded-full shadow-lg
             transition duration-300 ease-in-out transform hover:scale-105
             flex items-center justify-center space-x-4
@@ -59,18 +62,17 @@ const BleConnectionIsland: FunctionComponent<BleConnectionIslandProps> = (
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             stroke="#000000"
-            class="text-blue-600"
+            class="text-drk-primary-a0"
           >
             <path
               d="M7 17L17 7L12 2V22L17 17L7 7"
-              stroke="#2563eb"
+              stroke="#e4eb85"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
             </path>
           </svg>
-          <span class="sr-only">Connect to Bluetooth Device</span>
         </button>
 
         {/* Connection Status Message */}

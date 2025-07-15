@@ -7,6 +7,7 @@ import SensorDataDisplayIsland, {
   SensorDataDisplayChartData,
 } from "./SensorDataDisplayIsland.tsx";
 import { addExampleTimeSeriesData } from "../utils/data.ts";
+import { DARK_MODE_COLORS } from "../colors.ts";
 
 // Define the props for the StageNavigatorIsland component.
 interface StageIslandProps {
@@ -42,10 +43,13 @@ const StageNavigatorIsland: FunctionComponent<StageIslandProps> = (
   // Example data (adjust as needed)
   const chartData = useSignal<SensorDataDisplayChartData>({
     datasets: [{
+      type: "line",
       label: "Sensor Time Series Data",
-      pointBorderWidth: 1,
       data: data,
       tension: 0.3,
+      pointBorderWidth: 1,
+      borderColor: DARK_MODE_COLORS["drk-primary-a10"],
+      backgroundColor: DARK_MODE_COLORS["drk-primary-a20"],
     }],
   });
 
