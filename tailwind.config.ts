@@ -1,5 +1,4 @@
 import { type Config } from "tailwindcss";
-import { DARK_MODE_COLORS } from "./colors.ts";
 
 export default {
   content: [
@@ -7,9 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        ...DARK_MODE_COLORS,
-      },
+      colors: {},
     },
   },
 } satisfies Config;
