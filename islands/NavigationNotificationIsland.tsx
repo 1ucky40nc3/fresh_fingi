@@ -46,7 +46,7 @@ const NavigationNotificationIsland: FunctionComponent<
           )}
         </div>
         <div class="h-20">
-          {bluetoothConnected.value && (
+          {!bluetoothConnected.value && (
             <BluetoothDisconnectedNotificationIsland>
             </BluetoothDisconnectedNotificationIsland>
           )}

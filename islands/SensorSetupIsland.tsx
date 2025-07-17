@@ -14,7 +14,7 @@ const SensorSetupIsland: FunctionComponent<SensorSetupProps> = (
   return (
     <>
       <div class="flex flex-col">
-        <h1>Sensor Setup</h1>
+        <h1>Setup Step 2/2: Bluetooth</h1>
         <button type="button" onClick={handleOnClick}>
           <span>Tare sensor.</span>
         </button>

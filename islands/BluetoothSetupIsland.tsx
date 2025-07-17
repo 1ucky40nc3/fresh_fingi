@@ -17,7 +17,7 @@ const BluetoothSetupIsland: FunctionComponent<BluetoothSetupProps> = (
   return (
     <>
       <div class="flex flex-col">
-        <h1>Bluetooth Setup</h1>
+        <h1>Setup Step 1/2: Bluetooth</h1>
         <button type="button" onClick={handleOnClick}>
           <span>Scan and connect to a bluetooth device.</span>
         </button>
