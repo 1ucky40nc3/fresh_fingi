@@ -6,26 +6,33 @@ import TrainingIsland from "./TrainingIsland.tsx";
 import NavigationNotificationIsland from "./NavigationNotificationIsland.tsx";
 
 interface StageProps {
-  appContext: Signal<TAppContext>;
+  appState: Signal<TAppState>;
+  bluetoothConnected: Signal<boolean>;
 }
 
 const StageIsland: FunctionComponent<StageProps> = (
-  props: StageProps,
+  { appState, bluetoothConnected }: StageProps,
 ) => {
   return (
     <>
       <div class="min-h-screen flex flex-col">
-        <NavigationNotificationIsland appContext={props.appContext}>
+        <NavigationNotificationIsland
+          appState={appState}
+          bluetoothConnected={bluetoothConnected}
+        >
         </NavigationNotificationIsland>
-        {props.appContext.value.state === "bluetoothSetup" && (
-          <BluetoothSetupIsland appContext={props.appContext}>
+        {appState.value === "bluetoothSetup" && (
+          <BluetoothSetupIsland
+            appState={appState}
+            bluetoothConnected={bluetoothConnected}
+          >
           </BluetoothSetupIsland>
         )}
-        {props.appContext.value.state === "sensorSetup" && (
-          <SensorSetupIsland appContext={props.appContext}></SensorSetupIsland>
+        {appState.value === "sensorSetup" && (
+          <SensorSetupIsland appState={appState}></SensorSetupIsland>
         )}
-        {props.appContext.value.state === "training" && (
-          <TrainingIsland appContext={props.appContext}></TrainingIsland>
+        {appState.value === "training" && (
+          <TrainingIsland appState={appState}></TrainingIsland>
         )}
       </div>
     </>

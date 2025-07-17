@@ -1,5 +1,7 @@
 import { FunctionComponent } from "preact/src/index.d.ts";
-import { Signal, useSignal } from "@preact/signals";
+import { Signal } from "@preact/signals";
+import { useState } from "preact/hooks";
+
 import BluetoothDisconnectedNotificationIsland from "./BluetoothNotificationIsland.tsx";
 import PreviousTransitionIsland from "./PreviousTransitionIsland.tsx";
 import { AppStateTransitionDirectionsFactory } from "../utils/transitions.ts";
@@ -9,33 +11,27 @@ import { AppStateTransitionDirectionsFactory } from "../utils/transitions.ts";
  */
 interface NavigationNotificationProps {
   /** The current application context. */
-  appContext: Signal<TAppContext>;
-}
-
-/**
- * Create a dummy transition that does nothing.
- */
-export function createDummyTransitionHandle(): TAppStateTransition<
-  Signal<TAppContext>
-> {
-  return {
-    // deno-lint-ignore no-unused-vars
-    handler: (context: Signal<TAppContext>) => {
-      console.warn("A dummy transition handler was called!");
-    },
-  };
+  appState: Signal<TAppState>;
+  bluetoothConnected: Signal<boolean>;
 }
 
 const NavigationNotificationIsland: FunctionComponent<
   NavigationNotificationProps
 > = (
-  props: NavigationNotificationProps,
+  { appState, bluetoothConnected }: NavigationNotificationProps,
 ) => {
+  const [prevTransitionAvailable, setPrevTransitionAvailable] = useState(false);
+
   const transitions = AppStateTransitionDirectionsFactory.for(
-    props.appContext.value.state,
+    appState.value,
   );
-  const prevTransitionAvailable: boolean = Boolean(transitions.prev);
-  const prevTransition = transitions.prev || createDummyTransitionHandle();
+  setPrevTransitionAvailable(transitions.prev.available);
+  function transitionHandler(): void {
+    if (transitions.prev !== undefined) {
+      transitions.prev.handler(appState);
+    }
+  }
+  const text: string = transitions.prev.text;
 
   return (
     <>
@@ -43,17 +39,17 @@ const NavigationNotificationIsland: FunctionComponent<
         <div class="h-20">
           {prevTransitionAvailable && (
             <PreviousTransitionIsland
-              appContext={props.appContext}
-              transition={prevTransition}
+              transitionHandler={transitionHandler}
+              text={text}
             >
             </PreviousTransitionIsland>
           )}
         </div>
         <div class="h-20">
-          <BluetoothDisconnectedNotificationIsland
-            appContext={props.appContext}
-          >
-          </BluetoothDisconnectedNotificationIsland>
+          {bluetoothConnected.value && (
+            <BluetoothDisconnectedNotificationIsland>
+            </BluetoothDisconnectedNotificationIsland>
+          )}
         </div>
       </div>
     </>

@@ -2,17 +2,14 @@ import { FunctionComponent } from "preact/src/index.d.ts";
 import { Signal } from "@preact/signals";
 
 interface SensorSetupProps {
-  appContext: Signal<TAppContext>;
+  appState: Signal<TAppState>;
 }
 
 const SensorSetupIsland: FunctionComponent<SensorSetupProps> = (
-  props: SensorSetupProps,
+  { appState }: SensorSetupProps,
 ) => {
   function handleOnClick() {
-    console.debug("Handle tare sensor button click.");
-    console.debug(props.appContext.value);
-    props.appContext.value.state = "training";
-    console.debug(props.appContext.value);
+    appState.value = "training";
   }
   return (
     <>

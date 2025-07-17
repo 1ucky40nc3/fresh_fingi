@@ -21,7 +21,8 @@ type TAppStateTransition<C> = {
   /** A function that handles the state transition. */
   handler: TAppTransitionHandler<C>;
   /** An optional text we display as part of the transition. */
-  text?: string;
+  text: string;
+  available: boolean;
 };
 
 /**
@@ -31,7 +32,7 @@ type TAppStateTransition<C> = {
  */
 type TAppStateTransitionDirections<C> = Record<
   TTransitionDirection,
-  TAppStateTransition<C> | undefined
+  TAppStateTransition<C>
 >;
 
 /**

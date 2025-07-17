@@ -2,18 +2,17 @@ import { FunctionComponent } from "preact/src/index.d.ts";
 import { Signal } from "@preact/signals";
 
 interface BluetoothSetupProps {
-  appContext: Signal<TAppContext>;
+  appState: Signal<TAppState>;
+  bluetoothConnected: Signal<boolean>;
 }
 
 const BluetoothSetupIsland: FunctionComponent<BluetoothSetupProps> = (
-  props: BluetoothSetupProps,
+  { appState, bluetoothConnected }: BluetoothSetupProps,
 ) => {
   function handleOnClick() {
     console.debug("Handle bluetooth scan and connect button click.");
-    props.appContext.value.state = "sensorSetup";
-    console.debug(props.appContext.value);
-    props.appContext.value.bluetoothConnected = true;
-    console.debug(props.appContext.value);
+    appState.value = "sensorSetup";
+    bluetoothConnected.value = true;
   }
   return (
     <>
