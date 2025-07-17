@@ -2,7 +2,6 @@
 import { Head } from "$fresh/runtime.ts";
 import { PageProps } from "$fresh/server.ts";
 import { signal } from "@preact/signals";
-import StageNavigatorIsland from "../islands/StageNavigatorIsland.tsx";
 import StageIsland from "../islands/StageIsland.tsx";
 
 /**
@@ -29,11 +28,6 @@ export default function Home(_props: PageProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div class="min-h-screen flex flex-col bg-drk-surface-a0">
-        {/* Stage Navigator at the top */}
-        <StageNavigatorIsland
-          currentStage={currentStage}
-          completedStages={completedStages}
-        />
         {/* Main content area, conditionally rendering the current stage island */}
         <StageIsland
           currentStage={currentStage}
