@@ -1,7 +1,8 @@
 // routes/index.tsx
 import { Head } from "$fresh/runtime.ts";
 import { PageProps } from "$fresh/server.ts";
-import { signal } from "@preact/signals";
+import { Signal, useSignal } from "@preact/signals";
+import NavigationNotificationIsland from "../islands/NavigationNotificationIsland.tsx";
 import StageIsland from "../islands/StageIsland.tsx";
 
 /**
@@ -9,31 +10,20 @@ import StageIsland from "../islands/StageIsland.tsx";
  * This component will render the appropriate "island" (stage) based on the application's state.
  */
 export default function Home(_props: PageProps) {
-  // State to manage the current active stage (1, 2, or 3)
-  const currentStage = signal<number>(3);
-  // State to track the highest stage successfully completed.
-  // This is crucial for enabling/disabling navigation.
-  const completedStages = signal<number>(2);
-
-  console.log(
-    "Home Component Rendering - currentStage.value:",
-    currentStage.value,
-  );
+  const state: Signal<TAppState> = useSignal<TAppState>("sensorSetup");
+  const appContext: Signal<TAppContext> = useSignal<TAppContext>({
+    state: state.value,
+    bluetoothConnected: false,
+  });
 
   return (
     <>
       <Head>
-        <title>BLE Sensor App</title>
+        <title>fresh_fingi</title>
         {/* Viewport meta tag for responsive design */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div class="min-h-screen flex flex-col bg-drk-surface-a0">
-        {/* Main content area, conditionally rendering the current stage island */}
-        <StageIsland
-          currentStage={currentStage}
-          completedStages={completedStages}
-        />
-      </div>
+      <StageIsland appContext={appContext}></StageIsland>
     </>
   );
 }

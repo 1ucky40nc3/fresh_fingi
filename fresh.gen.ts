@@ -5,12 +5,13 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $BleConnectionIsland from "./islands/BleConnectionIsland.tsx";
-import * as $ChartIsland from "./islands/ChartIsland.tsx";
-import * as $SensorCalibrationIsland from "./islands/SensorCalibrationIsland.tsx";
-import * as $SensorDataDisplayIsland from "./islands/SensorDataDisplayIsland.tsx";
+import * as $BluetoothNotificationIsland from "./islands/BluetoothNotificationIsland.tsx";
+import * as $BluetoothSetupIsland from "./islands/BluetoothSetupIsland.tsx";
+import * as $NavigationNotificationIsland from "./islands/NavigationNotificationIsland.tsx";
+import * as $PreviousTransitionIsland from "./islands/PreviousTransitionIsland.tsx";
+import * as $SensorSetupIsland from "./islands/SensorSetupIsland.tsx";
 import * as $StageIsland from "./islands/StageIsland.tsx";
-import * as $StageNavigatorIsland from "./islands/StageNavigatorIsland.tsx";
+import * as $TrainingIsland from "./islands/TrainingIsland.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -20,12 +21,13 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/BleConnectionIsland.tsx": $BleConnectionIsland,
-    "./islands/ChartIsland.tsx": $ChartIsland,
-    "./islands/SensorCalibrationIsland.tsx": $SensorCalibrationIsland,
-    "./islands/SensorDataDisplayIsland.tsx": $SensorDataDisplayIsland,
+    "./islands/BluetoothNotificationIsland.tsx": $BluetoothNotificationIsland,
+    "./islands/BluetoothSetupIsland.tsx": $BluetoothSetupIsland,
+    "./islands/NavigationNotificationIsland.tsx": $NavigationNotificationIsland,
+    "./islands/PreviousTransitionIsland.tsx": $PreviousTransitionIsland,
+    "./islands/SensorSetupIsland.tsx": $SensorSetupIsland,
     "./islands/StageIsland.tsx": $StageIsland,
-    "./islands/StageNavigatorIsland.tsx": $StageNavigatorIsland,
+    "./islands/TrainingIsland.tsx": $TrainingIsland,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
