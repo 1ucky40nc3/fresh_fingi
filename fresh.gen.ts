@@ -8,6 +8,7 @@ import * as $index from "./routes/index.tsx";
 import * as $BluetoothNotificationIsland from "./islands/BluetoothNotificationIsland.tsx";
 import * as $BluetoothSetupIsland from "./islands/BluetoothSetupIsland.tsx";
 import * as $NavigationNotificationIsland from "./islands/NavigationNotificationIsland.tsx";
+import * as $NextTransitionIsland from "./islands/NextTransitionIsland.tsx";
 import * as $PreviousTransitionIsland from "./islands/PreviousTransitionIsland.tsx";
 import * as $SensorSetupIsland from "./islands/SensorSetupIsland.tsx";
 import * as $StageIsland from "./islands/StageIsland.tsx";
@@ -24,6 +25,7 @@ const manifest = {
     "./islands/BluetoothNotificationIsland.tsx": $BluetoothNotificationIsland,
     "./islands/BluetoothSetupIsland.tsx": $BluetoothSetupIsland,
     "./islands/NavigationNotificationIsland.tsx": $NavigationNotificationIsland,
+    "./islands/NextTransitionIsland.tsx": $NextTransitionIsland,
     "./islands/PreviousTransitionIsland.tsx": $PreviousTransitionIsland,
     "./islands/SensorSetupIsland.tsx": $SensorSetupIsland,
     "./islands/StageIsland.tsx": $StageIsland,

@@ -19,10 +19,10 @@ type TAppTransitionHandler<C> = (context: C) => void;
  */
 type TAppStateTransition<C> = {
   /** A function that handles the state transition. */
-  handler: TAppTransitionHandler<C>;
+  handleTransition: TAppTransitionHandler<C>;
   /** An optional text we display as part of the transition. */
   text: string;
-  available: boolean;
+  isAvailable: (blueeothConnected: boolean) => boolean;
 };
 
 /**

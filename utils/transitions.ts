@@ -8,22 +8,33 @@ export function dummyHandler<T>(_: Signal<T>) {
 }
 
 /**
+ * Implement a dummy function that returns if a transition is available.
+ *
+ * @returns {boolean} Wether the transition is available. This function always returns `false`;
+ */
+export function dummyIsAvailable(
+  _: boolean,
+): boolean {
+  return false;
+}
+
+/**
  * Create a dummy transition that does nothing.
  *
  * @param handler A transition handler. By default we use {@link dummyHandler}.
  * @param text A text that describes the transition to the user. The default is an empty string (no description).
  */
 export function createTransition(
-  handler: (appState: Signal<TAppState>) => void = dummyHandler,
+  handleTransition: (appState: Signal<TAppState>) => void = dummyHandler,
   text: string = "",
-  available: boolean = false,
+  isAvailable: (blueeothConnected: boolean) => boolean = dummyIsAvailable,
 ): TAppStateTransition<
   Signal<TAppState>
 > {
   return {
-    handler,
+    handleTransition,
     text,
-    available,
+    isAvailable,
   };
 }
 
@@ -44,8 +55,8 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "",
-      true,
+      "Calibration Setup",
+      (blueeoothConnected: boolean) => blueeoothConnected,
     ),
   },
   sensorSetup: {
@@ -61,11 +72,11 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
         );
       },
       "Bluetooth Setup",
-      true,
+      (_: boolean) => true,
     ),
     next: createTransition(
       (state: Signal<TAppState>) => {
-        const nextState: TAppState = "sensorSetup";
+        const nextState: TAppState = "training";
         state.value = nextState;
         console.debug(
           `Transitioning from 'sensorSetup' to next '${nextState}' stage.`,
@@ -74,8 +85,8 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "",
-      true,
+      "Training",
+      (_: boolean) => true,
     ),
   },
   training: {
@@ -91,7 +102,7 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
         );
       },
       "Calibration Setup",
-      true,
+      (_: boolean) => true,
     ),
     next: createTransition(),
   },

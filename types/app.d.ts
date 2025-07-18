@@ -7,16 +7,3 @@
  *  - `training`: After setup the device can be used for training. Here we display sensor data.
  */
 type TAppState = "bluetoothSetup" | "sensorSetup" | "training";
-
-/**
- * A type for the app context.
- *
- * @description The app context is a serializable type that is shared in accross the app.
- * Using the app context we decide which UI elements to display and manage transitions.
- */
-type TAppContext = {
-  /** The app state. */
-  state: TAppState;
-  /** Whether the app is connected with a compatible BLE device. */
-  bluetoothConnected: boolean;
-};
