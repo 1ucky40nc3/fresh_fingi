@@ -8,10 +8,11 @@ import NavigationNotificationIsland from "./NavigationNotificationIsland.tsx";
 interface StageProps {
   appState: Signal<TAppState>;
   bluetoothConnected: Signal<boolean>;
+  sensorMeasurement: Signal<number>;
 }
 
 const StageIsland: FunctionComponent<StageProps> = (
-  { appState, bluetoothConnected }: StageProps,
+  { appState, bluetoothConnected, sensorMeasurement }: StageProps,
 ) => {
   return (
     <>
@@ -29,7 +30,11 @@ const StageIsland: FunctionComponent<StageProps> = (
           </BluetoothSetupIsland>
         )}
         {appState.value === "sensorSetup" && (
-          <SensorSetupIsland appState={appState}></SensorSetupIsland>
+          <SensorSetupIsland
+            appState={appState}
+            sensorMeasurement={sensorMeasurement}
+          >
+          </SensorSetupIsland>
         )}
         {appState.value === "training" && (
           <TrainingIsland appState={appState}></TrainingIsland>
