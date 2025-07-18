@@ -6,12 +6,12 @@ interface PreviousTransitionProps {
 }
 
 const NextTransitionIsland: FunctionComponent<PreviousTransitionProps> = (
-  { transitionHandler }: PreviousTransitionProps,
+  { text, transitionHandler }: PreviousTransitionProps,
 ) => {
   return (
     <>
-      <button type="button" onClick={transitionHandler}>
-        <div class="flex flex-row items-center align-middle">
+      <div class="flex flex-row items-center align-middle">
+        <button type="button" onClick={transitionHandler}>
           <svg
             class="w-gr-1 h-gr-1 block flex-none align-middle"
             viewBox="0 0 24 24"
@@ -29,9 +29,9 @@ const NextTransitionIsland: FunctionComponent<PreviousTransitionProps> = (
               stroke-linejoin="round"
             />
           </svg>
-          {/*<span class="inline-block align-middle leading-none">{text}</span>*/}
-        </div>
-      </button>
+        </button>
+        <span class="inline-block align-middle leading-none">{text}</span>
+      </div>
     </>
   );
 };
