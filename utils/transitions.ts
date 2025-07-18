@@ -55,7 +55,7 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "Calibration Setup",
+      "Calibration",
       (blueeoothConnected: boolean) => blueeoothConnected,
     ),
   },
@@ -71,7 +71,7 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "Bluetooth Setup",
+      "Bluetooth",
       (_: boolean) => true,
     ),
     next: createTransition(
@@ -85,7 +85,7 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "Training",
+      "Train",
       (_: boolean) => true,
     ),
   },
@@ -101,7 +101,7 @@ const TRANSITIONS: TAppStateTransitions<Signal<TAppState>> = {
           `Current state value: '${state.value}'`,
         );
       },
-      "Calibration Setup",
+      "Calibration",
       (_: boolean) => true,
     ),
     next: createTransition(),

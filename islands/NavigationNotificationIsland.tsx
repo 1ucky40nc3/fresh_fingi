@@ -2,7 +2,7 @@ import { FunctionComponent } from "preact/src/index.d.ts";
 import { Signal } from "@preact/signals";
 import { useState } from "preact/hooks";
 
-import BluetoothDisconnectedNotificationIsland from "./BluetoothNotificationIsland.tsx";
+import BluetoothDisconnectedNotificationIsland from "./BluetoothDisconnectedNotificationIsland.tsx";
 import PreviousTransitionIsland from "./PreviousTransitionIsland.tsx";
 import { AppStateTransitionDirectionsFactory } from "../utils/transitions.ts";
 import NextTransitionIsland from "./NextTransitionIsland.tsx";
@@ -50,7 +50,7 @@ const NavigationNotificationIsland: FunctionComponent<
 
   return (
     <>
-      <div class="flex flow-row justify-between h-20">
+      <div class="flex flex-row justify-between items-center w-screen h-gr-1 gap-x-4">
         <div>
           {prevTransitionAvailable && (
             <PreviousTransitionIsland
@@ -60,12 +60,14 @@ const NavigationNotificationIsland: FunctionComponent<
             </PreviousTransitionIsland>
           )}
         </div>
-        <div>
-          {!bluetoothConnected.value && (
+
+        {!bluetoothConnected.value && (
+          <div>
             <BluetoothDisconnectedNotificationIsland>
             </BluetoothDisconnectedNotificationIsland>
-          )}
-        </div>
+          </div>
+        )}
+
         <div>
           {nextTransitionAvailable && (
             <NextTransitionIsland
