@@ -70,7 +70,9 @@ const BluetoothDisconnectedNotificationIsland: FunctionComponent = () => {
               stroke-linejoin="round"
             />
           </svg>
-          <span>Bluetooth disconnected!</span>
+          <span class="inline-block align-middle leading-none">
+            Connection lost!
+          </span>
         </div>
       </button>
     </>
