@@ -44,13 +44,18 @@ export default function Training(
           delay: 100, // Delay in ms until the newest data point is shown
           onRefresh: props.onRefresh.value,
         },
+        ticks: {
+          font: {
+            family: "font-text",
+          },
+        },
       },
       y: {
         position: "right",
-        title: {
-          display: true,
-          text: "Force (kg)",
-          color: "white",
+        ticks: {
+          font: {
+            family: "font-text",
+          },
         },
         beginAtZero: true,
       },
@@ -62,7 +67,14 @@ export default function Training(
     plugins: {
       zoom: zoomPluginOptions,
       legend: {
-        display: false,
+        display: true,
+        labels: {
+          font: {
+            family: "font-heading",
+            weight: "bold",
+            size: 20,
+          },
+        },
       },
     },
   });

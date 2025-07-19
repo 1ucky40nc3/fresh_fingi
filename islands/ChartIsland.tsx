@@ -154,12 +154,13 @@ export default function ChartIsland<
         ref={containerRef}
         class=" flex flex-col justify-around"
       >
-        <div class="pt-6 pb-6 w-gr-double-3">
+        <div class="pt-6 pb-6 w-gr-double-3 w-full">
           <canvas ref={canvasRef}>
           </canvas>
         </div>
         <div class="flex flex-row flex-grow justify-around">
           <button
+            type="button"
             class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleStopAndResumeDataStream}
           >
@@ -168,6 +169,7 @@ export default function ChartIsland<
             </span>
           </button>
           <button
+            type="button"
             class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleResetZoom}
           >
@@ -176,6 +178,7 @@ export default function ChartIsland<
             </span>
           </button>
           <button
+            type="button"
             class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleClearData}
           >

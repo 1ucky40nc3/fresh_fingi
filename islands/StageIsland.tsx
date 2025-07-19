@@ -19,16 +19,16 @@ const StageIsland: FunctionComponent<StageProps> = (
   const chartData = useSignal<TrainingChartData>({
     datasets: [{
       type: "line",
-      label: "Sensor Time Series Data",
+      label: "Sensor Data (in kg)",
       data: data,
       tension: 0.3,
-      pointBorderWidth: 1,
+      pointRadius: 0,
     }],
   });
 
   const onRefresh: Signal<{ (): void }> = useSignal((): void => {
     addExampleTimeSeriesData(chartData.value.datasets[0].data, {
-      count: 100,
+      count: 2000,
       min: -200,
       max: 200,
     });
