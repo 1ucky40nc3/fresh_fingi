@@ -16,7 +16,7 @@ const BluetoothDisconnectedNotificationIsland: FunctionComponent = () => {
       >
         <div class="flex flex-row items-center">
           <span class="inline-block align-middle leading-none font-interactive mr-2 ml-2">
-            No Bluetooth!
+            No Connection!
           </span>
         </div>
       </button>

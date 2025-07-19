@@ -4,15 +4,19 @@ import { Signal } from "@preact/signals";
 interface BluetoothSetupProps {
   appState: Signal<TAppState>;
   bluetoothConnected: Signal<boolean>;
+  handleConnectToBluetooth: Signal<{ (): void }>;
 }
 
 const BluetoothSetupIsland: FunctionComponent<BluetoothSetupProps> = (
-  { appState, bluetoothConnected }: BluetoothSetupProps,
+  { appState, bluetoothConnected, handleConnectToBluetooth }:
+    BluetoothSetupProps,
 ) => {
-  function handleOnClick() {
+  async function handleOnClick(): Promise<void> {
     console.debug("Handle bluetooth scan and connect button click.");
-    appState.value = "sensorSetup";
-    bluetoothConnected.value = true;
+    await handleConnectToBluetooth.value();
+    if (bluetoothConnected.value) {
+      appState.value = "sensorSetup";
+    }
   }
   return (
     <>

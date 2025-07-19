@@ -40,7 +40,9 @@
   },
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "preact",
+    "lib": ["deno.dom", "deno.ns", "dom.bluetooth"],
+    "strict": true
   },
   "nodeModulesDir": "auto"
 }

@@ -4,7 +4,10 @@ import BluetoothSetupIsland from "./BluetoothSetupIsland.tsx";
 import SensorSetupIsland from "./SensorSetupIsland.tsx";
 import TrainingIsland, { TrainingChartData } from "./TrainingIsland.tsx";
 import NavigationNotificationIsland from "./NavigationNotificationIsland.tsx";
-import { addExampleTimeSeriesData } from "../utils/data.ts";
+import {
+  TIME_SERIES_CHARACTERISTIC_UUID,
+  TIME_SERIES_SERVICE_UUID,
+} from "../utils/config.ts";
 
 interface StageProps {
   appState: Signal<TAppState>;
@@ -15,23 +18,66 @@ interface StageProps {
 const StageIsland: FunctionComponent<StageProps> = (
   { appState, bluetoothConnected }: StageProps,
 ) => {
-  const data: TimeSeriesDataType[] = [];
+  let data: TimeSeriesDataType[] = [];
+
+  const handleConnectToBluetooth: Signal<{ (): void }> = useSignal<
+    () => Promise<void>
+  >(
+    async (): Promise<void> => {
+      try {
+        const serviceUUID = TIME_SERIES_SERVICE_UUID;
+        const characteristicUUID = TIME_SERIES_CHARACTERISTIC_UUID;
+
+        // @ts-expect-error Property 'bluetooth' does not exist on type 'Navigator'.deno-ts(2339)
+        const bluetoothDevice = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: [serviceUUID],
+        });
+        const server = await bluetoothDevice.gatt.connect();
+        if (!server) {
+          throw new Error("Could not connect to GATT server.");
+        }
+
+        const service = await server.getPrimaryService(serviceUUID);
+        const characteristic = await service.getCharacteristic(
+          characteristicUUID,
+        );
+
+        characteristic.addEventListener(
+          "characteristicvaluechanged",
+          (event: any) => {
+            const receivedValue = event.target.value;
+            const textValue = new TextDecoder().decode(
+              receivedValue?.buffer || new ArrayBuffer(0),
+            );
+            const numberValue = Number(textValue);
+            data.push({
+              x: new Date().toISOString(),
+              y: numberValue,
+            });
+          },
+        );
+        await characteristic.startNotifications();
+        bluetoothConnected.value = true;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  );
+
   const chartData = useSignal<TrainingChartData>({
     datasets: [{
       type: "line",
       label: "Sensor Data (in kg)",
-      data: data,
+      data: [],
       tension: 0.3,
       pointRadius: 0,
     }],
   });
 
   const onRefresh: Signal<{ (): void }> = useSignal((): void => {
-    addExampleTimeSeriesData(chartData.value.datasets[0].data, {
-      count: 2000,
-      min: -200,
-      max: 200,
-    });
+    chartData.value.datasets[0].data.push(...data);
+    data = [];
   });
 
   return (
@@ -46,6 +92,7 @@ const StageIsland: FunctionComponent<StageProps> = (
           <BluetoothSetupIsland
             appState={appState}
             bluetoothConnected={bluetoothConnected}
+            handleConnectToBluetooth={handleConnectToBluetooth}
           >
           </BluetoothSetupIsland>
         )}
