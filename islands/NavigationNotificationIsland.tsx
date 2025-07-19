@@ -50,7 +50,7 @@ const NavigationNotificationIsland: FunctionComponent<
 
   return (
     <>
-      <div class="flex flex-row justify-between items-center w-screen h-gr-1 gap-x-4">
+      <div class="flex flex-row justify-between items-center h-gr-1">
         <div>
           {prevTransitionAvailable && (
             <PreviousTransitionIsland
