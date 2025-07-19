@@ -17,7 +17,7 @@ export default {
     },
     goldenRatio: {
       spacerUnit: "vh",
-      spacerBase: 100,
+      spacerBase: 95, // Account for some padding
     },
   },
   plugins: [goldenRatioPlugin],
