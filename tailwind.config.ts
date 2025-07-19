@@ -1,5 +1,5 @@
 import { type Config } from "tailwindcss";
-import { DARK_MODE_COLORS } from "./colors.ts";
+import goldenRatioPlugin from "tailwindcss-golden-ratio";
 
 export default {
   content: [
@@ -7,9 +7,18 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        ...DARK_MODE_COLORS,
+      spacing: {},
+      colors: {},
+      fontFamily: {
+        "interactive": ["Bitcount Grid Single"],
+        "heading": ["Special Gothic Expanded OneStatic"],
+        "text": ["Inconsolata"],
       },
     },
+    goldenRatio: {
+      spacerUnit: "vh",
+      spacerBase: 90, // Account for some padding
+    },
   },
+  plugins: [goldenRatioPlugin],
 } satisfies Config;

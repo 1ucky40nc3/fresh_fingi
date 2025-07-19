@@ -106,6 +106,21 @@ export default function ChartIsland<
         // Do stop the scrolling
         realtime.pause = doStopDataStream.value;
       }
+      if (chartRef.current.config.options?.plugins?.zoom) {
+        // Toggle the zoom, pinch and pan gestures
+        const zoomPluginOptions = chartRef.current.config.options.plugins.zoom;
+        if (zoomPluginOptions.zoom?.wheel?.enabled !== undefined) {
+          zoomPluginOptions.zoom.wheel.enabled = !zoomPluginOptions.zoom?.wheel
+            ?.enabled;
+        }
+        if (zoomPluginOptions.zoom?.pinch?.enabled !== undefined) {
+          zoomPluginOptions.zoom.pinch.enabled = !zoomPluginOptions.zoom?.pinch
+            ?.enabled;
+        }
+        if (zoomPluginOptions.pan?.enabled !== undefined) {
+          zoomPluginOptions.pan.enabled = !zoomPluginOptions.pan?.enabled;
+        }
+      }
       doStopDataStream.value = !doStopDataStream.value;
       console.debug(
         `Did toggle the doStopDataStream value to '${doStopDataStream}'`,
@@ -137,28 +152,39 @@ export default function ChartIsland<
     <>
       <div
         ref={containerRef}
-        class="w-full h-full flex flex-col justify-around"
+        class=" flex flex-col justify-around"
       >
-        <canvas ref={canvasRef}>
-        </canvas>
-        <div class="w-full flex flex-row flex-grow justify-around">
+        <div class="pt-6 pb-6 w-gr-double-3 w-full">
+          <canvas ref={canvasRef}>
+          </canvas>
+        </div>
+        <div class="flex flex-row flex-grow justify-around">
           <button
-            class=" text-white rounded bg-drk-surface-a20"
+            type="button"
+            class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleStopAndResumeDataStream}
           >
-            {doStopDataStream.value ? "Stop" : "Resume"}
+            <span class="inline-block align-middle leading-none font-interactive">
+              {doStopDataStream.value ? "Stop" : "Resume"}
+            </span>
           </button>
           <button
-            class=" text-white rounded bg-drk-surface-a20"
+            type="button"
+            class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleResetZoom}
           >
-            Reset Zoom
+            <span class="inline-block align-middle leading-none font-interactive">
+              Reset Zoom
+            </span>
           </button>
           <button
-            class=" text-white rounded bg-drk-surface-a20"
+            type="button"
+            class="border-dotted border-black border-2 p-1 rounded-xl"
             onClick={handleClearData}
           >
-            Clear data
+            <span class="inline-block align-middle leading-none font-interactive">
+              Clear data
+            </span>
           </button>
         </div>
       </div>

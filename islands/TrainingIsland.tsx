@@ -1,52 +1,39 @@
 import { Signal, useSignal } from "@preact/signals";
 import { ChartData, ChartOptions } from "chart.js";
 import ChartIsland from "./ChartIsland.tsx";
-import { DARK_MODE_COLORS } from "../colors.ts";
 
-export type SensorDataDisplayChartData = ChartData<
+export type TrainingChartData = ChartData<
   "line",
   TimeSeriesDataType[]
 >;
 
-interface SensorDataDisplayIslandProps {
-  chartData: Signal<SensorDataDisplayChartData>;
+interface TrainingProps {
+  chartData: Signal<TrainingChartData>;
   onRefresh: Signal<{ (): void }>;
 }
 
-export default function SensorDataDisplayIsland(
-  props: SensorDataDisplayIslandProps,
+export default function Training(
+  props: TrainingProps,
 ) {
   const zoomPluginOptions: ZoomPluginOptions = {
     zoom: {
       wheel: {
-        enabled: true,
+        enabled: false, // We disable the `zoom` by default while streaming (this get's toggled when pausing the stream)
       },
       pinch: {
-        enabled: true,
+        enabled: false, // We disable the `pinch` by default while streaming (this get's toggled when pausing the stream)
       },
       mode: "xy",
     },
     pan: {
-      enabled: true,
+      enabled: false, // We disable the `zoom` by default while streaming (this get's toggled when pausing the stream)
       mode: "xy",
-    },
-  };
-
-  const sharedScaleOptios = {
-    ticks: {
-      color: "white",
-    },
-    grid: {
-      color: DARK_MODE_COLORS["drk-surface-a10"],
     },
   };
 
   const chartOptions: Signal<ChartOptions> = useSignal<ChartOptions>({
     responsive: true,
     maintainAspectRatio: true,
-    color: DARK_MODE_COLORS["drk-surface-a10"],
-    backgroundColor: DARK_MODE_COLORS["drk-primary-a20"],
-    borderColor: DARK_MODE_COLORS["drk-primary-a10"],
     scales: {
       x: {
         position: "bottom",
@@ -57,17 +44,20 @@ export default function SensorDataDisplayIsland(
           delay: 100, // Delay in ms until the newest data point is shown
           onRefresh: props.onRefresh.value,
         },
-        ...sharedScaleOptios,
+        ticks: {
+          font: {
+            family: "font-text",
+          },
+        },
       },
       y: {
         position: "right",
-        title: {
-          display: true,
-          text: "Force (kg)",
-          color: "white",
+        ticks: {
+          font: {
+            family: "font-text",
+          },
         },
         beginAtZero: true,
-        ...sharedScaleOptios,
       },
     },
     interaction: {
@@ -77,7 +67,14 @@ export default function SensorDataDisplayIsland(
     plugins: {
       zoom: zoomPluginOptions,
       legend: {
-        display: false,
+        display: true,
+        labels: {
+          font: {
+            family: "font-heading",
+            weight: "bold",
+            size: 20,
+          },
+        },
       },
     },
   });
