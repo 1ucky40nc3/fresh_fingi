@@ -7,10 +7,13 @@ export default {
   ],
   theme: {
     extend: {
-      spacing: {
-        "icon-square": "var(--w-icon)", // 'w-icon' utility class will use --w-icon
-      },
+      spacing: {},
       colors: {},
+      fontFamily: {
+        "interactive": ["Bitcount Grid Single"],
+        "heading": ["Special Gothic Expanded OneStatic"],
+        "text": ["Inconsolata"],
+      },
     },
     goldenRatio: {
       spacerUnit: "vh",

@@ -24,7 +24,7 @@ const SensorSetupIsland: FunctionComponent<SensorSetupProps> = (
         </div>
         <div class="h-gr-half-4 flex flex-col justify-center items-center">
           <button type="button" onClick={handleOnClick}>
-            <span>Tare Sensor.</span>
+            <span class="font-interactive">Tare Sensor -{">"}</span>
           </button>
         </div>
       </div>
