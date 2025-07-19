@@ -12,7 +12,7 @@ interface StageProps {
 }
 
 const StageIsland: FunctionComponent<StageProps> = (
-  { appState, bluetoothConnected, sensorMeasurement }: StageProps,
+  { appState, bluetoothConnected }: StageProps,
 ) => {
   return (
     <>
@@ -32,7 +32,6 @@ const StageIsland: FunctionComponent<StageProps> = (
         {appState.value === "sensorSetup" && (
           <SensorSetupIsland
             appState={appState}
-            sensorMeasurement={sensorMeasurement}
           >
           </SensorSetupIsland>
         )}
