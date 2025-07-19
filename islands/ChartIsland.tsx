@@ -106,6 +106,21 @@ export default function ChartIsland<
         // Do stop the scrolling
         realtime.pause = doStopDataStream.value;
       }
+      if (chartRef.current.config.options?.plugins?.zoom) {
+        // Toggle the zoom, pinch and pan gestures
+        const zoomPluginOptions = chartRef.current.config.options.plugins.zoom;
+        if (zoomPluginOptions.zoom?.wheel?.enabled !== undefined) {
+          zoomPluginOptions.zoom.wheel.enabled = !zoomPluginOptions.zoom?.wheel
+            ?.enabled;
+        }
+        if (zoomPluginOptions.zoom?.pinch?.enabled !== undefined) {
+          zoomPluginOptions.zoom.pinch.enabled = !zoomPluginOptions.zoom?.pinch
+            ?.enabled;
+        }
+        if (zoomPluginOptions.pan?.enabled !== undefined) {
+          zoomPluginOptions.pan.enabled = !zoomPluginOptions.pan?.enabled;
+        }
+      }
       doStopDataStream.value = !doStopDataStream.value;
       console.debug(
         `Did toggle the doStopDataStream value to '${doStopDataStream}'`,

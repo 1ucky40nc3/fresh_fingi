@@ -18,15 +18,15 @@ export default function Training(
   const zoomPluginOptions: ZoomPluginOptions = {
     zoom: {
       wheel: {
-        enabled: true,
+        enabled: false, // We disable the `zoom` by default while streaming (this get's toggled when pausing the stream)
       },
       pinch: {
-        enabled: true,
+        enabled: false, // We disable the `pinch` by default while streaming (this get's toggled when pausing the stream)
       },
       mode: "xy",
     },
     pan: {
-      enabled: true,
+      enabled: false, // We disable the `zoom` by default while streaming (this get's toggled when pausing the stream)
       mode: "xy",
     },
   };
