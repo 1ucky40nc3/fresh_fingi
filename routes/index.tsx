@@ -9,9 +9,9 @@ import StageIsland from "../islands/StageIsland.tsx";
  * This component will render the appropriate "island" (stage) based on the application's state.
  */
 export default function Home(_props: PageProps) {
-  const appState: Signal<TAppState> = useSignal<TAppState>("training");
+  const appState: Signal<TAppState> = useSignal<TAppState>("bluetoothSetup");
   const bluetoothConnected: Signal<boolean> = useSignal<boolean>(false);
-  const sensorMeasurement: Signal<number> = useSignal<number>(10);
+  const sensorMeasurement: Signal<number> = useSignal<number>(0);
   return (
     <>
       <Head>
