@@ -41,3 +41,9 @@ docker build --build-arg GIT_REVISION=$(git rev-parse HEAD) -t fresh_fingi .
 docker run -t -i -p 8000:8000 fresh_fingi
 # Open http://localhost and you see the application
 ```
+
+## Sources
+
+- [Deno Fresh Web App Demo]
+
+[Deno Fresh Web App Demo]: https://github.com/erictherobot/deno-app-1
