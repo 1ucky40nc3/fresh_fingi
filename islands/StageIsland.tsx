@@ -33,6 +33,12 @@ const StageIsland: FunctionComponent<StageProps> = (
           acceptAllDevices: true,
           optionalServices: [serviceUUID],
         });
+        bluetoothDevice.addEventListener(
+          "gattserverdisconnected",
+          (event: any): void => {
+            bluetoothConnected.value = false;
+          },
+        );
         const server = await bluetoothDevice.gatt.connect();
         if (!server) {
           throw new Error("Could not connect to GATT server.");
@@ -45,7 +51,7 @@ const StageIsland: FunctionComponent<StageProps> = (
 
         characteristic.addEventListener(
           "characteristicvaluechanged",
-          (event: any) => {
+          (event: any): void => {
             const receivedValue = event.target.value;
             const textValue = new TextDecoder().decode(
               receivedValue?.buffer || new ArrayBuffer(0),
