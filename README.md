@@ -29,3 +29,15 @@ rm -r node_modules/
 deno clean
 deno cache --reload .
 ```
+
+### Deployment
+
+Here is how you can create a Docker container to deploy this application:
+
+```bash
+# Build a Docker container image
+docker build --build-arg GIT_REVISION=$(git rev-parse HEAD) -t fresh_fingi .
+# Run a Docker container
+docker run -t -i -p 8000:8000 fresh_fingi
+# Open http://localhost and you see the application
+```
