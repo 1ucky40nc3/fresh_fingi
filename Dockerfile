@@ -1,4 +1,6 @@
-FROM denoland/deno:latest
+ARG PLATFORM=linux/amd64
+
+FROM --platform=${PLATFORM} denoland/deno:latest
 
 ARG GIT_REVISION
 ARG PORT=80
