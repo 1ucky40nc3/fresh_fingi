@@ -29,3 +29,21 @@ rm -r node_modules/
 deno clean
 deno cache --reload .
 ```
+
+### Deployment
+
+Here is how you can create a Docker container to deploy this application:
+
+```bash
+# Build a Docker container image
+docker build --build-arg GIT_REVISION=$(git rev-parse HEAD) -t fresh_fingi .
+# Run a Docker container
+docker run -t -i -p 1234:80 fresh_fingi
+# Open http://localhost:1234 and you see the application
+```
+
+## Sources
+
+- [Deno Fresh Web App Demo]
+
+[Deno Fresh Web App Demo]: https://github.com/erictherobot/deno-app-1
