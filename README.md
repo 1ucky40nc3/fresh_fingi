@@ -36,7 +36,7 @@ Here is how you can create a Docker container to deploy this application:
 
 ```bash
 # Build a Docker container image
-docker build --build-arg GIT_REVISION=$(git rev-parse HEAD) -t fresh_fingi .
+docker build --build-arg GIT_REVISION=$(git rev-parse HEAD) --build-arg PLATFORM=linux/amd64 -t fresh_fingi .
 # Run a Docker container
 docker run -t -i -p 1234:80 fresh_fingi
 # Open http://localhost:1234 and you see the application
