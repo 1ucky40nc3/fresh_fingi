@@ -1,7 +1,10 @@
 FROM denoland/deno:latest
 
 ARG GIT_REVISION
+ARG PORT=80
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
+ENV PORT=${PORT}
+
 
 WORKDIR /app
 
@@ -12,6 +15,6 @@ RUN deno cache main.ts
 # Build (ahead-of-time) the application
 RUN deno task build
 
-EXPOSE 8000
+EXPOSE ${PORT}
 
 CMD ["run", "-A", "main.ts"]
